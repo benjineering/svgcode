@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-# 6
-# C = cubic bezier
 SVG_STR = 
 '<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg
@@ -32,14 +30,12 @@ SVG_STR =
 </svg>'
 
 RSpec.describe Svgcode do
-
   it 'has a version number' do
     expect(Svgcode::VERSION).not_to be nil
   end
 
   it 'parses a simple SVG file' do
     gcode = Svgcode.parse(SVG_STR)
-    byebug
     expect(gcode.length).to be > 1
   end
 end
