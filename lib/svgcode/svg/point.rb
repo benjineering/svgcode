@@ -3,11 +3,12 @@ module Svgcode
     class Point
       attr_accessor :x, :y
 
-      SEP = /[,\s]/
+      VALUE_SEP = /\s?,\s?/
+      OBJECT_SEP = /\b\s+\b/
 
       def initialize(str_or_x, y = nil)
         if y.nil?
-          parts = str_or_x.split(SEP)
+          parts = str_or_x.split(VALUE_SEP)
           @x = parts.first.to_f
           @y = parts.last.to_f
         else
@@ -16,12 +17,12 @@ module Svgcode
         end
       end
 
-      def self.parse(str)
-        str.split(SEP).each_slice(2).collect { |a| Point.new(a.first, a.last) }
+      def ==(other)
+        other.x.eql?(@x) && other.y.eql?(@y)
       end
 
-      def to_s
-        "#{@x} #{@y}"
+      def self.parse(str)
+        str.split(OBJECT_SEP).collect { |p| Point.new(p) }
       end
     end
   end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Svgcode::GCode::Command do
   describe '.new' do
-
+    
   end
 
   describe '#to_s' do

@@ -34,7 +34,7 @@ RSpec.describe Svgcode do
     expect(Svgcode::VERSION).not_to be nil
   end
 
-  it 'parses a simple SVG file' do
+  skip 'parses a simple SVG file' do
     gcode = Svgcode.parse(SVG_STR)
     expect(gcode.length).to be > 1
   end
