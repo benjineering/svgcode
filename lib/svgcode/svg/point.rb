@@ -4,7 +4,7 @@ module Svgcode
       attr_reader :x, :y
 
       VALUE_SEP = /\s?,\s?/
-      OBJECT_SEP = /\b\s+\b/
+      OBJECT_SEP = /\s+/
 
       def initialize(str_or_x, y = nil)
         if y.nil?
@@ -22,7 +22,7 @@ module Svgcode
       end
 
       def self.parse(str)
-        str.split(OBJECT_SEP).collect { |p| Point.new(p) }
+        str.split(OBJECT_SEP).collect { |p| Point.new(p.strip) }
       end
     end
   end

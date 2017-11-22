@@ -1,67 +1,67 @@
 require 'spec_helper'
 
 RSpec.describe Svgcode::GCode::Program do
-  describe '.new' do
+  skip '.new' do
 
   end
 
-  describe '#feedrate' do
+  skip '#feedrate' do
 
   end
 
-  describe '#clearance' do
+  skip '#clearance' do
 
   end
 
-  describe '#depth' do
+  skip '#depth' do
 
   end
 
-  describe '#<<' do
+  skip '#<<' do
 
   end
 
-  describe '#metric!' do
+  skip '#metric!' do
 
   end
 
-  describe '#absolute!' do
+  skip '#absolute!' do
 
   end
 
-  describe '#feedrate!' do
+  skip '#feedrate!' do
 
   end
 
-  describe '#stop!' do
+  skip '#stop!' do
 
   end
 
-  describe '#home!' do
+  skip '#home!' do
 
   end
 
-  describe '#go!' do
+  skip '#go!' do
 
   end
 
-  describe '#cut!' do
+  skip '#cut!' do
 
   end
 
-  describe '#clear!' do
+  skip '#clear!' do
 
   end
 
-  describe '#plunge!' do
+  skip '#plunge!' do
 
   end
 
-  describe '#cubic_spline!' do
+  skip '#cubic_spline!' do
 
   end
 
-  describe '#to_s' do
+  skip '#to_s' do
 
   end
 end

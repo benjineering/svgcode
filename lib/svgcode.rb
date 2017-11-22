@@ -4,7 +4,7 @@ require 'nokogiri'
 
 module Svgcode
   def self.parse(xml_str)
-    doc = Nokogiri.parse(SVG_STR)
+    doc = Nokogiri.parse(xml_str)
     doc.remove_namespaces!
     c = GCode::Converter.new
 

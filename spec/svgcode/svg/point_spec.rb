@@ -86,5 +86,16 @@ RSpec.describe Svgcode::SVG::Point do
         expect(points).to eq [Svgcode::SVG::Point.new(5.11, 1.0)]
       end
     end
+
+    context 'when the second point has negative values' do
+      let(:points) { Svgcode::SVG::Point.parse('5.11,1.0 -52,-56.9') }
+
+      it 'returns an array of point objects' do
+        expect(points).to eq [
+          Svgcode::SVG::Point.new(5.11, 1.0),
+          Svgcode::SVG::Point.new(-52.0, -56.9)
+        ]
+      end
+    end
   end
 end

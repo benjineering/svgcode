@@ -1,23 +1,23 @@
 require 'spec_helper'
 
 RSpec.describe Svgcode::GCode::Converter do
-  describe '.new' do
+  skip '.new' do
 
   end
 
-  describe '#<<' do
+  skip '#<<' do
 
   end
 
-  describe '#finish' do
+  skip '#finish' do
 
   end
 
-  describe '#mm' do
+  skip '#mm' do
 
   end
 
-  describe '#to_s' do
+  skip '#to_s' do
 
   end
 end
