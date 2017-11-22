@@ -1,25 +1,29 @@
 module Svgcode
   module GCode
     class Command
-      attr_accessor :letter, :number, :args
-
-      SEP = /(?=[a-z])/i
+      attr_reader :letter, :number, :args
 
       def initialize(str_or_sym = nil, number = nil, args = [])
-        if str_or_sym.is_a?(String)
+        if number.nil?
           parts = str_or_sym.split(/\s+/)
-          cmd = Command.parse(parts.shift)
+          cmd = Command.parse_single(parts.shift)
           @letter = cmd.letter
           @number = cmd.number
-          parts.each { |arg| @args << Command.parse(arg) }
-        
-        elsif str_or_sym.is_a?(Symbol)
+          @args = parts.collect { |arg| Command.parse_single(arg) }        
+        else
           @letter = str_or_sym
           @number = number
           @args = args
         end
 
         @letter = @letter.to_s.upcase
+        @number = @number.to_f
+      end
+
+      def self.parse_single(str)
+        letter = str[0].to_sym
+        number = str.length > 1 ? str[1..(str.length - 1)] : nil
+        Command.new(letter, number)
       end
 
       def to_s
@@ -30,12 +34,11 @@ module Svgcode
         str
       end
 
-      def self.parse(single_command_str)
-        str = single_command_str.split(SEP)
-        cmd = Command.new
-        cmd.letter = cmd.first
-        cmd.number = cmd.last.to_f
-        cmd
+      def ==(other)
+        other.is_a?(self.class) && 
+          other.letter == @letter &&
+          other.number.eql?(@number) &&
+          other.args == @args
       end
 
       def self.absolute
@@ -72,11 +75,11 @@ module Svgcode
         ])
       end
 
-      def self.cubic_spline(i, j, p_, q, x, y)
+      def self.cubic_spline(i, j, _p, q, x, y)
         Command.new(:g, 5, [
           Command.new(:i, i),
           Command.new(:j, j),
-          Command.new(:p, p_),
+          Command.new(:p, _p),
           Command.new(:q, q),
           Command.new(:x, x),
           Command.new(:y, y)

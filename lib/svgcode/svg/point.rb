@@ -1,7 +1,7 @@
 module Svgcode
   module SVG
     class Point
-      attr_accessor :x, :y
+      attr_reader :x, :y
 
       VALUE_SEP = /\s?,\s?/
       OBJECT_SEP = /\b\s+\b/
@@ -18,7 +18,7 @@ module Svgcode
       end
 
       def ==(other)
-        other.x.eql?(@x) && other.y.eql?(@y)
+        other.is_a?(self.class) && other.x.eql?(@x) && other.y.eql?(@y)
       end
 
       def self.parse(str)

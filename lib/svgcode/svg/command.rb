@@ -39,7 +39,8 @@ module Svgcode
       end
 
       def ==(other)
-        other.name == @name && 
+        other.is_a?(self.class) && 
+          other.name == @name && 
           other.absolute == @absolute && 
           other.points == @points
       end
