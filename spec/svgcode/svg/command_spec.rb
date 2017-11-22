@@ -65,7 +65,7 @@ RSpec.describe Svgcode::SVG::Command do
   end
 
   describe '#absolute?' do
-    context 'the absolute attribute is true' do
+    context 'when the absolute attribute is true' do
       let(:command) { Svgcode::SVG::Command.new(:move, true) }
 
       it 'returns true' do
@@ -73,7 +73,7 @@ RSpec.describe Svgcode::SVG::Command do
       end
     end
 
-    context 'the absolute attribute is false' do
+    context 'when the absolute attribute is false' do
       let(:command) { Svgcode::SVG::Command.new(:move, false) }
 
       it 'returns false' do
@@ -83,7 +83,7 @@ RSpec.describe Svgcode::SVG::Command do
   end
 
   describe '#relative?' do
-    context 'the absolute attribute is true' do
+    context 'when the absolute attribute is true' do
       let(:command) { Svgcode::SVG::Command.new(:move, true) }
 
       it 'returns false' do
@@ -91,11 +91,71 @@ RSpec.describe Svgcode::SVG::Command do
       end
     end
 
-    context 'the absolute attribute is false' do
+    context 'when the absolute attribute is false' do
       let(:command) { Svgcode::SVG::Command.new(:move, false) }
 
       it 'returns true' do
         expect(command.relative?).to be true
+      end
+    end
+  end  
+
+  describe '#==' do
+    let(:a) do
+      Svgcode::SVG::Command.new(:cubic, true, [
+        Svgcode::SVG::Point.new(166, 15.815),
+        Svgcode::SVG::Point.new(3, 12.99)
+      ])
+    end
+
+    context 'when name, absolute and points are the same' do
+      let(:b) do
+        Svgcode::SVG::Command.new(:cubic, true, [
+          Svgcode::SVG::Point.new(166, 15.815),
+          Svgcode::SVG::Point.new(3, 12.99)
+        ])
+      end
+
+      it 'returns true' do
+        expect(a == b).to be true
+      end
+    end
+
+    context 'when name differs' do
+      let(:b) do
+        Svgcode::SVG::Command.new(:line, true, [
+          Svgcode::SVG::Point.new(166, 15.815),
+          Svgcode::SVG::Point.new(3, 12.99)
+        ])
+      end
+
+      it 'returns false' do
+        expect(a == b).to be false
+      end
+    end
+
+    context 'when absolute differs' do
+      let(:b) do
+        Svgcode::SVG::Command.new(:cubic, false, [
+          Svgcode::SVG::Point.new(166, 15.815),
+          Svgcode::SVG::Point.new(3, 12.99)
+        ])
+      end
+
+      it 'returns false' do
+        expect(a == b).to be false
+      end
+    end
+
+    context 'when points differ' do
+      let(:b) do
+        Svgcode::SVG::Command.new(:cubic, true, [
+          Svgcode::SVG::Point.new(3, 12.99)
+        ])
+      end
+
+      it 'returns false' do
+        expect(a == b).to be false
       end
     end
   end

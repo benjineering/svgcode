@@ -2,38 +2,38 @@ require 'spec_helper'
 
 RSpec.describe Svgcode::SVG::Point do
   describe '.new' do
-    context 'when X and Y are passed as a comma separated string' do
+    context 'when x and y are passed as a comma separated string' do
       let(:point) { Svgcode::SVG::Point.new('100,22.8') }
 
-      it 'parses X to a float' do
+      it 'parses x to a float' do
         expect(point.x).to eql 100.0
       end
 
-      it 'parses Y to a float' do
+      it 'parses y to a float' do
         expect(point.y).to eql 22.8
       end
     end
 
-    context 'when X and Y are passed as separate strings' do
+    context 'when x and y are passed as separate strings' do
       let(:point) { Svgcode::SVG::Point.new('5', '18.2222') }
 
-      it 'parses X to a float' do
+      it 'parses x to a float' do
         expect(point.x).to eql 5.0
       end
 
-      it 'parses Y to a float' do
+      it 'parses y to a float' do
         expect(point.y).to eql 18.2222
       end
     end
 
-    context 'when X and Y are passed as floats' do
+    context 'when x and y are passed as floats' do
       let(:point) { Svgcode::SVG::Point.new(17.23, 16.2) }
 
-      it 'sets X' do
+      it 'sets x' do
         expect(point.x).to eql 17.23
       end
 
-      it 'sets Y' do
+      it 'sets y' do
         expect(point.y).to eql 16.2
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe Svgcode::SVG::Point do
   describe '#==' do
     let(:a) { Svgcode::SVG::Point.new(5, 6) }
 
-    context 'when both points have the same value for X and Y' do
+    context 'when x and y are the same' do
       let(:b) { Svgcode::SVG::Point.new(5, 6) }
 
       it 'returns true' do
@@ -50,7 +50,7 @@ RSpec.describe Svgcode::SVG::Point do
       end
     end
 
-    context "when the points' X values differ" do
+    context 'when x differs' do
       let(:b) { Svgcode::SVG::Point.new(5.8, 6) }
 
       it 'returns false' do
@@ -58,7 +58,7 @@ RSpec.describe Svgcode::SVG::Point do
       end
     end
 
-    context "when the points' Y values differ" do
+    context 'when y differs' do
       let(:b) { Svgcode::SVG::Point.new(5, 17) }
 
       it 'returns false' do
