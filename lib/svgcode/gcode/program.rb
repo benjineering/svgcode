@@ -42,6 +42,10 @@ module Svgcode
         self << Command.absolute
       end
 
+      def relative!
+        self << Command.relative
+      end
+
       def feedrate!(rate = nil)
         if rate.nil?
           rate = feedrate
@@ -93,11 +97,17 @@ module Svgcode
       def cubic_spline!(i, j, _p, q, x, y)
         plunge! unless @is_plunged
 
+
+        self << Command.cubic_spline(i, j,_p, q, x, y)
+
+
+=begin
         self << Command.cubic_spline(
           i - @x,  j - @y, # relative to current pos
           _p - x, q - y,   # relative to next pos
           x,  y
         )
+=end
 
         @x = x
         @y = y

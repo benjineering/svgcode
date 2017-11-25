@@ -9,7 +9,5 @@ in_path = File.expand_path(ARGV.first)
 raise "#{in_path} is not readable" unless File.readable?(in_path)
 svg_str = File.read(in_path)
 
-puts svg_str
-
 out_path = in_path.gsub(/\.svg\Z/i, '.ngc')
 File.open(out_path, 'w') { |f| f << Svgcode.parse(svg_str) }

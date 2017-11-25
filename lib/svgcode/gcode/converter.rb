@@ -11,7 +11,6 @@ module Svgcode
         @finished = false
         @prog = Program.new
         @prog.metric!
-        @prog.absolute!
         @prog.feedrate!
         @prog.home!
       end
@@ -20,20 +19,29 @@ module Svgcode
         svg_start = nil
         path = SVG::Path.new(svg_d)
         start = nil
+        is_absolute = false
 
-        path.commands.each do |svg|
-          start = svg if start.nil? && svg.name != :move
+        path.commands.each do |cmd|
+          start = cmd if start.nil? && cmd.name != :move
 
-          case svg.name
+          if (cmd.name == :close || cmd.absolute?) && !is_absolute
+            @prog.absolute!
+            is_absolute = true
+          elsif is_absolute
+            @prog.relative!
+            is_absolute = false
+          end
+
+          case cmd.name
           when :move
-            @prog.go!(mm(svg.points.first.x), mm(-svg.points.first.y))
+            @prog.go!(mm(cmd.points.first.x), mm(-cmd.points.first.y))
           when :line
-            @prog.cut!(mm(svg.points.first.x), mm(-svg.points.first.y))
+            @prog.cut!(mm(cmd.points.first.x), mm(-cmd.points.first.y))
           when :cubic
             @prog.cubic_spline!(
-              mm(svg.points[0].x), mm(-svg.points[0].y),
-              mm(svg.points[1].x), mm(-svg.points[1].y),
-              mm(svg.points[2].x), mm(-svg.points[2].y)
+              mm(cmd.points[0].x), mm(-cmd.points[0].y),
+              mm(cmd.points[1].x), mm(-cmd.points[1].y),
+              mm(cmd.points[2].x), mm(-cmd.points[2].y)
             )
           when :close
             @prog.cut!(mm(start.points.first.x), mm(-start.points.first.y))

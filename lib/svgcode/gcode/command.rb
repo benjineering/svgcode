@@ -45,6 +45,10 @@ module Svgcode
         Command.new(:g, 90)
       end
 
+      def self.relative
+        Command.new(:g, 91)
+      end
+
       def self.metric
         Command.new(:g, 21)
       end
