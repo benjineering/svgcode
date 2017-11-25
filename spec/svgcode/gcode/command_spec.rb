@@ -133,4 +133,237 @@ RSpec.describe Svgcode::GCode::Command do
       end
     end
   end
+
+  describe '.parse_single' do
+    context 'when a string containing a single command is passed' do
+      let(:command) { Svgcode::GCode::Command.parse_single('X15.78') }
+
+      it 'returns a new command' do
+        expect(command).to be_a Svgcode::GCode::Command
+      end
+
+      it "sets the returned command's letter" do
+        expect(command.letter).to eq 'X'
+      end
+
+      it "sets the returned command's number" do
+        expect(command.number).to eql 15.78
+      end
+    end
+  end
+
+  describe '.absolute' do
+    let(:command) { Svgcode::GCode::Command.absolute }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to G" do
+      expect(command.letter).to eq 'G'
+    end
+
+    it "sets the returned command's number to 90" do
+      expect(command.number).to eq 90
+    end
+  end
+
+  describe '.relative' do
+    let(:command) { Svgcode::GCode::Command.relative }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to G" do
+      expect(command.letter).to eq 'G'
+    end
+
+    it "sets the returned command's number to 91" do
+      expect(command.number).to eq 91
+    end
+  end
+
+  describe '.home' do
+    let(:command) { Svgcode::GCode::Command.home }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to G" do
+      expect(command.letter).to eq 'G'
+    end
+
+    it "sets the returned command's number to 30" do
+      expect(command.number).to eq 30
+    end
+  end
+
+  describe '.stop' do
+    let(:command) { Svgcode::GCode::Command.stop }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to M" do
+      expect(command.letter).to eq 'M'
+    end
+
+    it "sets the returned command's number to 2" do
+      expect(command.number).to eq 2
+    end
+  end
+
+  describe '.feedrate' do
+    context 'when a feedrate float is passed'
+    let(:command) { Svgcode::GCode::Command.feedrate(13.9998) }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to F" do
+      expect(command.letter).to eq 'F'
+    end
+
+    it "sets the returned command's number to 13.9998" do
+      expect(command.number).to eql 13.9998
+    end
+  end
+
+  describe '.go' do
+    context 'when x and y floats are passed' do
+      let(:command) { Svgcode::GCode::Command.go(20.2, 15.632) }
+
+      it 'returns a new command' do
+        expect(command).to be_a Svgcode::GCode::Command
+      end
+
+      it "sets the returned command's letter to G" do
+        expect(command.letter).to eq 'G'
+      end
+
+      it "sets the returned command's number to 0" do
+        expect(command.number).to eq 0
+      end
+
+      it "sets the returned command's args to X20.2 and Y15.632" do
+        expect(command.args).to eq [
+          Svgcode::GCode::Command.new(:x, 20.2),
+          Svgcode::GCode::Command.new(:y, 15.632)
+        ]
+      end
+    end
+  end
+
+  describe '.cut' do
+    context 'when x and y floats are passed' do
+      let(:command) { Svgcode::GCode::Command.cut(8, 19.19) }
+
+      it 'returns a new command' do
+        expect(command).to be_a Svgcode::GCode::Command
+      end
+
+      it "sets the returned command's letter to G" do
+        expect(command.letter).to eq 'G'
+      end
+
+      it "sets the returned command's number to 1" do
+        expect(command.number).to eq 1
+      end
+
+      it "sets the returned command's args to X8.0 and Y19.19" do
+        expect(command.args).to eq [
+          Svgcode::GCode::Command.new(:x, 8.0),
+          Svgcode::GCode::Command.new(:y, 19.19)
+        ]
+      end
+    end
+  end
+
+  describe '.cubic_spline' do
+    context 'when i, j, p, q, x and y floats are passed' do
+      let(:command) do
+        Svgcode::GCode::Command.cubic_spline(1.1, 2.2, 3.3, 4.4, 5.5, 6.6)
+      end
+
+      it 'returns a new command' do
+        expect(command).to be_a Svgcode::GCode::Command
+      end
+
+      it "sets the returned command's letter to G" do
+        expect(command.letter).to eq 'G'
+      end
+
+      it "sets the returned command's number to 5" do
+        expect(command.number).to eq 5
+      end
+
+      it "sets the returned command's args to \
+      I1.1, J2.2, P3.3, Q4.4 X5.5 Y6.6" do
+        expect(command.args).to eq [
+          Svgcode::GCode::Command.new(:i, 1.1),
+          Svgcode::GCode::Command.new(:j, 2.2),
+          Svgcode::GCode::Command.new(:p, 3.3),
+          Svgcode::GCode::Command.new(:q, 4.4),
+          Svgcode::GCode::Command.new(:x, 5.5),
+          Svgcode::GCode::Command.new(:y, 6.6)
+        ]
+      end
+    end
+  end
+
+  describe '.clear' do
+    context 'when a clearance float of 5.565 is passed' do
+      let(:command) do
+        Svgcode::GCode::Command.clear(5.565)
+      end
+
+      it 'returns a new command' do
+        expect(command).to be_a Svgcode::GCode::Command
+      end
+
+      it "sets the returned command's letter to G" do
+        expect(command.letter).to eq 'G'
+      end
+
+      it "sets the returned command's number to 0" do
+        expect(command.number).to eq 0
+      end
+
+      it "sets the returned command's args to Z5.565" do
+        expect(command.args).to eq [
+          Svgcode::GCode::Command.new(:z, 5.565)
+        ]
+      end
+    end
+  end
+
+  describe '.plunge' do
+    context 'when a plunge float of 2 is passed' do
+      let(:command) do
+        Svgcode::GCode::Command.plunge(2)
+      end
+
+      it 'returns a new command' do
+        expect(command).to be_a Svgcode::GCode::Command
+      end
+
+      it "sets the returned command's letter to G" do
+        expect(command.letter).to eq 'G'
+      end
+
+      it "sets the returned command's number to 1" do
+        expect(command.number).to eq 1
+      end
+
+      it "sets the returned command's args to Z2.0" do
+        expect(command.args).to eq [
+          Svgcode::GCode::Command.new(:z, 2.0)
+        ]
+      end
+    end
+  end
 end
