@@ -33,6 +33,10 @@ module Svgcode
         Point.new(@x + other.x, @y + other.y)
       end
 
+      def -(other)
+        Point.new(@x - other.x, @y - other.y)
+      end
+
       def /(amount)
         Point.new(@x / amount, @y / amount)
       end

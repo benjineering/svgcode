@@ -46,11 +46,7 @@ module Svgcode
           when :line
             @program.cut!(cmd.points.first.x, cmd.points.first.y)
           when :cubic
-            @program.cubic_spline!(
-              cmd.points[0].x, cmd.points[0].y,
-              cmd.points[1].x, cmd.points[1].y,
-              cmd.points[2].x, cmd.points[2].y,
-            )
+            cubic!(cmd)
           when :close
             @program.cut!(start.points.first.x, start.points.first.y)
             start = nil
@@ -72,6 +68,22 @@ module Svgcode
 
       def to_s
         @program.to_s
+      end
+
+      private
+
+      def cubic!(cmd)
+        # SVG cubic bezier has all control points relative to start
+        # g-code I&J are relative to start, and P&Q relative to end
+        # I, J, P & Q are always relative, but SVG values can be absolute
+        cmd.points[0] -= @program.pos if cmd.absolute?
+        cmd.points[1] -= cmd.points[2]
+
+        @program.cubic_spline!(
+          cmd.points[0].x, cmd.points[0].y,
+          cmd.points[1].x, cmd.points[1].y,
+          cmd.points[2].x, cmd.points[2].y,
+        )
       end
     end
   end

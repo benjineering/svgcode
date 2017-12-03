@@ -142,23 +142,8 @@ module Svgcode
       end
 
       def cubic_spline!(i, j, _p, q, x, y)
-        # SVG cubic bezier has all control points relative to start
-        # g-code I&J are relative to start, and P&Q relative to end
-        # I, J, P & Q are always relative, but SVG values can be absolute
-        if absolute?
-          rel_i = i - @x
-          rel_j = j - @y
-          rel_p = _p - x
-          rel_q = q - y
-        else
-          rel_i = i
-          rel_j = j
-          rel_p = _p - x
-          rel_q = q - y
-        end
-
         perform_cut(x, y) do
-          self << Command.cubic_spline(rel_i, rel_j, rel_p, rel_q, x, y)
+          self << Command.cubic_spline(i, j, _p, q, x, y)
         end
       end
 
