@@ -196,6 +196,10 @@ RSpec.describe Svgcode::SVG::Command do
 
   skip '#divide_points_by!'
 
+  skip '#flip_points_y!'
+
+  skip '#absolute!'
+
   describe '.name_str' do
     context 'when a legitimate symbol and a boolean value are passed' do
       let(:string) { Svgcode::SVG::Command.name_str(:line, true) }

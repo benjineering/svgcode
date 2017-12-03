@@ -124,6 +124,10 @@ RSpec.describe Svgcode::SVG::Point do
 
   skip '#divide_by!'
 
+  skip '#flip_y!'
+
+  skip '#+'
+
   describe '.parse' do
     context 'when a string containing space separated point values is passed' do
       let(:points) { Svgcode::SVG::Point.parse('7.3,160.23 8.0,15.65') }

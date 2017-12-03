@@ -1,6 +1,5 @@
 ## TODO
-- fix Y axis
-- fix scaling
+- fix SVG Zs
 - handle horizontal and vertical lines
 - handle quadratic bezier curves
 - handle arcto

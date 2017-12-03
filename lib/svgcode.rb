@@ -6,13 +6,16 @@ module Svgcode
   def self.parse(xml_str)
     doc = Nokogiri.parse(xml_str)
     doc.remove_namespaces!
-    c = GCode::Converter.new
+
+    view_box = doc.xpath('/svg').first.attributes['viewBox'].value
+    max_y = view_box.split(/\s+/).last.to_f
+    converter = GCode::Converter.new(max_y: max_y)
 
     doc.xpath('//path').each do |path|
-      c << path.attributes['d'].value
+      converter << path.attributes['d'].value
     end
 
-    c.finish
-    c.to_s
+    converter.finish
+    converter.to_s
   end
 end

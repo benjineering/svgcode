@@ -44,6 +44,13 @@ module Svgcode
         !@absolute
       end
 
+      def absolute!(pos)
+        if relative?
+          @points.collect! { |p| p + pos }
+          @absolute = true
+        end
+      end
+
       def negate_points_y
         points = @points.collect { |point| point.negate_y }
         Command.new(name: @name, absolute: @absolute, points: points)
@@ -56,6 +63,11 @@ module Svgcode
 
       def divide_points_by!(amount)
         @points.each { |point| point.divide_by!(amount) }
+        nil
+      end
+
+      def flip_points_y!(max_y)
+        @points.each { |point| point.flip_y!(max_y) }
         nil
       end
 

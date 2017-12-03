@@ -21,7 +21,7 @@ module Svgcode
         @is_absolute = true if @is_absolute.nil?
 
         @opts = {
-          feedrate: 1_000,
+          feedrate: 120,
           clearance: 5,
           depth: -0.5
         }.merge(opts)

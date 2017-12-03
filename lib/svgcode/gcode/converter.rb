@@ -7,10 +7,11 @@ module Svgcode
       PX_PER_INCH = 300
       PX_PER_MM = PX_PER_INCH / 25.4
 
-      attr_reader :program, :finished, :metric
+      attr_reader :program, :finished, :metric, :max_y
 
-      def initialize(opts = {})
+      def initialize(opts)
         @finished = false
+        @max_y = opts.delete(:max_y)
         @program = Program.new(opts)
         @metric = opts[:metric] != false
         @metric ? @program.metric! : @program.imperial!
@@ -23,10 +24,10 @@ module Svgcode
         start = nil
 
         path.commands.each do |cmd|
-          #cmd.negate_points_y!
+          cmd.absolute? ? cmd.flip_points_y!(@max_y) : cmd.negate_points_y!
 
           if metric?
-            #cmd.divide_points_by!(PX_PER_MM)
+            cmd.divide_points_by!(PX_PER_MM)
           else
             cmd.divide_points_by!(PX_PER_INCH)
           end
@@ -40,20 +41,7 @@ module Svgcode
           case cmd.name
           when :move
             @program.go!(cmd.points.first.x, cmd.points.first.y)
-
-            if cmd.relative?
-              cmd = Svgcode::SVG::Command.new(
-                name: :move,
-                absolute: true,
-                points: [
-                  Svgcode::SVG::Point.new(
-                    cmd.points.first.x + @program.x,
-                    cmd.points.first.y + @program.y
-                  )
-                ]
-              )
-            end
-
+            cmd.absolute!(@program.pos) if cmd.relative?
             start = cmd
           when :line
             @program.cut!(cmd.points.first.x, cmd.points.first.y)

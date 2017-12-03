@@ -29,6 +29,10 @@ module Svgcode
         Point.new(other.x - @x, other.y - @y)
       end
 
+      def +(other)
+        Point.new(@x + other.x, @y + other.y)
+      end
+
       def /(amount)
         Point.new(@x / amount, @y / amount)
       end
@@ -36,6 +40,10 @@ module Svgcode
       def divide_by!(amount)
         @x /= amount
         @y /= amount
+      end
+
+      def flip_y!(max_y)
+        @y = max_y - @y
       end
 
       def ==(other)
