@@ -13,10 +13,6 @@ RSpec.describe Svgcode::GCode::Converter do
 
   end
 
-  skip '#mm' do
-
-  end
-
   skip '#to_s' do
 
   end

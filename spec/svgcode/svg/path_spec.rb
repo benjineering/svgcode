@@ -8,19 +8,27 @@ RSpec.describe Svgcode::SVG::Path do
       it 'parses commands to objects and saves them' do
         expect(path.commands).to eq [
           Svgcode::SVG::Command.new(
-            :move, true, [Svgcode::SVG::Point.new(37, 17)]
+            name: :move,
+            absolute: true,
+            points: [Svgcode::SVG::Point.new(37, 17)]
           ),
           Svgcode::SVG::Command.new(
-            :line, false, [Svgcode::SVG::Point.new(2, 9.1)]
+            name: :line,
+            absolute: false,
+            points: [Svgcode::SVG::Point.new(2, 9.1)]
           ),
-          Svgcode::SVG::Command.new(:close),
+          Svgcode::SVG::Command.new(name: :close),
           Svgcode::SVG::Command.new(
-            :move, true, [Svgcode::SVG::Point.new(50, 0)]
+            name: :move,
+            absolute: true,
+            points: [Svgcode::SVG::Point.new(50, 0)]
           ),
           Svgcode::SVG::Command.new(
-            :line, false, [Svgcode::SVG::Point.new(18, 17.0)]
+            name: :line,
+            absolute: false,
+            points: [Svgcode::SVG::Point.new(18, 17.0)]
           ),
-          Svgcode::SVG::Command.new(:close)
+          Svgcode::SVG::Command.new(name: :close)
         ]
       end
     end

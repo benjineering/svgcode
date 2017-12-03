@@ -1,15 +1,24 @@
 require 'svgcode/gcode/command'
+require 'svgcode/gcode/invalid_command_error'
 
 module Svgcode
   module GCode
     class Program
       attr_accessor :opts, :commands
-      attr_reader :is_plunged, :is_poised, :x, :y
+
+      # 3 states
+      # ========
+      # at Z home height:          @is_poised = false, @is_plunged = false
+      # at Z clearance height:     @is_poised = true,  @is_plunged = false
+      # at Z cutting depth height: @is_poised = true,  @is_plunged = true
+      attr_reader :is_plunged, :is_poised, :is_absolute, :x, :y
 
       def initialize(opts = {})
         @is_plunged = false
         @is_poised = false
         @commands = opts.delete(:commands) || []
+        @is_absolute = opts.delete(:absolute)
+        @is_absolute = true if @is_absolute.nil?
 
         @opts = {
           feedrate: 1_000,
@@ -30,7 +39,37 @@ module Svgcode
         @opts[:depth]
       end
 
+      def plunged?
+        @is_plunged
+      end
+
+      def poised?
+        @is_poised
+      end
+
+      def absolute?
+        @is_absolute
+      end
+
+      def relative?
+        @is_absolute.nil? ? nil : !@is_absolute
+      end
+
       def <<(command)
+        if (@x.nil? || @y.nil?) && 
+          command.letter == 'G' &&
+          command != Command.relative &&
+          command != Command.absolute
+        then
+          if relative?
+            raise InvalidCommandError.new(
+              'Cannot add a command when relative and @x or @y are nil'
+            )
+          else
+            @commands << Command.absolute
+          end
+        end
+
         @commands << command
       end
 
@@ -39,11 +78,17 @@ module Svgcode
       end
 
       def absolute!
-        self << Command.absolute
+        unless absolute?
+          self << Command.absolute
+          @is_absolute = true
+        end
       end
 
       def relative!
-        self << Command.relative
+        unless relative?
+          self << Command.relative
+          @is_absolute = false
+        end
       end
 
       def feedrate!(rate = nil)
@@ -61,60 +106,77 @@ module Svgcode
       end
 
       def home!
-        clear! if @is_plunged
-        self << Command.home
+        clear! if plunged?
+        self << Command.home if poised?
         @x = nil
-        y = nil
+        @y = nil
         @is_poised = false
       end
 
-      def go!(x, y)
-        clear! if @is_plunged
-        self << Command.go(x, y)
-        @x = x
-        @y = y
-      end
-
-      def cut!(x, y)
-        plunge! unless @is_plunged
-        self << Command.cut(x, y)
-        @x = x
-        @y = y
-      end
-
       def clear!
-        self << Command.clear(clearance)
+        temp_absolute { self << Command.clear(clearance) }
         @is_plunged = false
         @is_poised = true
       end
 
       def plunge!
-        clear! unless @is_poised
-        self << Command.plunge(depth)
+        clear! unless poised?
+        temp_absolute { self << Command.plunge(depth) }
         @is_plunged = true
       end
 
+      def go!(x, y)
+        clear! if plunged?
+        self << Command.go(x, y)
+        set_coords(x, y)
+      end
+
+      def cut!(x, y)
+        perform_cut(x, y) { self << Command.cut(x, y) }
+      end
+
       def cubic_spline!(i, j, _p, q, x, y)
-        plunge! unless @is_plunged
+        rel_i = @x + i
+        rel_j = @y + j
+        rel_p = x + _p
+        rel_q = y + q
 
+        perform_cut(x, y) do
+          self << Command.cubic_spline(rel_i, rel_j, rel_p, rel_q, x, y)
+        end
+      end
 
-        self << Command.cubic_spline(i, j,_p, q, x, y)
-
-
-=begin
-        self << Command.cubic_spline(
-          i - @x,  j - @y, # relative to current pos
-          _p - x, q - y,   # relative to next pos
-          x,  y
-        )
-=end
-
-        @x = x
-        @y = y
+      def pos
+        Svgcode::SVG::Point.new(@x, @y)
       end
 
       def to_s
         @commands.join("\n")
+      end
+
+      private
+
+      def perform_cut(x, y)
+        plunge! unless plunged?
+        yield
+        set_coords(x, y)
+      end
+
+      def temp_absolute
+        was_absolute = absolute?
+        absolute! unless absolute?
+        yield
+        relative! unless was_absolute
+      end
+
+      def set_coords(x, y)
+        if absolute?
+          @x = x
+          @y = y
+        else
+          @x += x
+          @y += y
+        end
       end
     end
   end

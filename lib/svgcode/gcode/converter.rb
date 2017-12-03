@@ -22,6 +22,7 @@ module Svgcode
         is_absolute = false
 
         path.commands.each do |cmd|
+          cmd.negate_points_y!          
           start = cmd if start.nil? && cmd.name != :move
 
           if (cmd.name == :close || cmd.absolute?) && !is_absolute
@@ -34,17 +35,13 @@ module Svgcode
 
           case cmd.name
           when :move
-            @prog.go!(mm(cmd.points.first.x), mm(-cmd.points.first.y))
+            @prog.go!(cmd.points.first.x, cmd.points.first.y)
           when :line
-            @prog.cut!(mm(cmd.points.first.x), mm(-cmd.points.first.y))
+            @prog.cut!(cmd.points.first.x, cmd.points.first.y)
           when :cubic
-            @prog.cubic_spline!(
-              mm(cmd.points[0].x), mm(-cmd.points[0].y),
-              mm(cmd.points[1].x), mm(-cmd.points[1].y),
-              mm(cmd.points[2].x), mm(-cmd.points[2].y)
-            )
+            cubic!(cmd)
           when :close
-            @prog.cut!(mm(start.points.first.x), mm(-start.points.first.y))
+            @prog.cut!(start.points.first.x, -start.points.first.y)
           end
         end
       end
@@ -57,12 +54,23 @@ module Svgcode
         end
       end
 
-      def mm(px)
-        px #* MM_PER_PX
-      end
-
       def to_s
         @prog.to_s
+      end
+
+      private      
+
+      def cubic!(cmd)
+        start_pt = @prog.pos
+        end_pt = cmd.points[2]
+        ctrl_pt_1 = cmd.points[0].relative(start_pt)
+        ctrl_pt_2 = cmd.points[1].relative(end_pt)
+
+        @prog.cubic_spline!(
+          ctrl_pt_1.x, ctrl_pt_1.y,
+          ctrl_pt_2.x, ctrl_pt_2.y,
+          end_pt.x, end_pt.y
+        )
       end
     end
   end

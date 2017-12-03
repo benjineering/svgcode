@@ -67,6 +67,59 @@ RSpec.describe Svgcode::SVG::Point do
     end
   end
 
+  describe '#negate_y' do
+    context 'when y is 0' do
+      let(:point) { Svgcode::SVG::Point.new(10, 0) }
+
+      it 'returns a new point equal to the original' do
+        expect(point.negate_y).to eq point
+      end
+    end
+
+    context 'when y is positive' do
+      let(:point) { Svgcode::SVG::Point.new(0, 15.80) }
+
+      it 'returns a new point with a negative y value' do
+        expect(point.negate_y).to eq Svgcode::SVG::Point.new(0, -15.80)
+      end
+    end
+
+    context 'when y is negative' do
+      let(:point) { Svgcode::SVG::Point.new(-2.2, -15) }
+
+      it 'returns a new point with a positive y value' do
+        expect(point.negate_y).to eq Svgcode::SVG::Point.new(-2.2, 15)
+      end
+    end
+  end
+
+  describe '#negate_y!' do
+    context 'when y is positive' do
+      let(:point) do
+        point = Svgcode::SVG::Point.new(0, 15.80)
+        point.negate_y!
+        point
+      end
+
+      it 'negates the y value in place' do
+        expect(point).to eq Svgcode::SVG::Point.new(0, -15.80)
+      end
+    end
+  end
+
+  describe '#relative' do
+    context 'when another point is passed' do
+      let(:point) do
+        pt = Svgcode::SVG::Point.new(3.7, 16.233)
+        pt.relative(Svgcode::SVG::Point.new(-1.1, 5))
+      end
+
+      it 'returns a new point with x and y values the sum of self and other' do
+        expect(point).to eq Svgcode::SVG::Point.new(2.6, 21.233)
+      end
+    end
+  end
+
   describe '.parse' do
     context 'when a string containing space separated point values is passed' do
       let(:points) { Svgcode::SVG::Point.parse('7.3,160.23 8.0,15.65') }

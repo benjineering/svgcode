@@ -17,12 +17,24 @@ module Svgcode
         end
       end
 
-      def ==(other)
-        other.is_a?(self.class) && other.x.eql?(@x) && other.y.eql?(@y)
+      def negate_y
+        Point.new(@x, -@y)
+      end
+
+      def negate_y!
+        @y = -@y
+      end
+
+      def relative(other)
+        Point.new(other.x + @x, other.y + @y)
       end
 
       def self.parse(str)
         str.split(OBJECT_SEP).collect { |p| Point.new(p.strip) }
+      end
+
+      def ==(other)
+        other.is_a?(self.class) && other.x.eql?(@x) && other.y.eql?(@y)
       end
     end
   end
