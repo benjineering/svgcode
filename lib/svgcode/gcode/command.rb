@@ -20,17 +20,22 @@ module Svgcode
         @number = @number.to_f
       end
 
-      def self.parse_single(str)
-        letter = str[0].to_sym
-        number = str.length > 1 ? str[1..(str.length - 1)] : nil
-        Command.new(letter, number)
-      end
-
       def to_s
         num_fmt = @letter == 'M' || @letter == 'G' ? "%02d" : "%.3f"
         num = num_fmt % @number
         str = "#{@letter}#{num}"
         str += " #{@args.join(' ')}" unless @args.nil? || @args.empty?
+
+        if self == Command.absolute
+          str += ' (abs)'
+        elsif self == Command.relative
+          str += ' (rel)'
+        elsif self == Command.metric
+          str += ' (metric)'
+        elsif self == Command.imperial
+          str += ' (imperial)'
+        end
+
         str
       end
 
@@ -39,6 +44,12 @@ module Svgcode
           other.letter == @letter &&
           other.number.eql?(@number) &&
           other.args == @args
+      end
+
+      def self.parse_single(str)
+        letter = str[0].to_sym
+        number = str.length > 1 ? str[1..(str.length - 1)] : nil
+        Command.new(letter, number)
       end
 
       def self.absolute

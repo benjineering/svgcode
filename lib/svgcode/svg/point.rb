@@ -26,15 +26,28 @@ module Svgcode
       end
 
       def relative(other)
-        Point.new(other.x + @x, other.y + @y)
+        Point.new(other.x - @x, other.y - @y)
       end
 
-      def self.parse(str)
-        str.split(OBJECT_SEP).collect { |p| Point.new(p.strip) }
+      def /(amount)
+        Point.new(@x / amount, @y / amount)
+      end
+
+      def divide_by!(amount)
+        @x /= amount
+        @y /= amount
       end
 
       def ==(other)
         other.is_a?(self.class) && other.x.eql?(@x) && other.y.eql?(@y)
+      end
+
+      def to_s
+        "#{@x},#{@y}"
+      end
+
+      def self.parse(str)
+        str.split(OBJECT_SEP).collect { |p| Point.new(p.strip) }
       end
     end
   end

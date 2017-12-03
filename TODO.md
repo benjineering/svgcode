@@ -1,5 +1,6 @@
 ## TODO
-- create base Point and GCode::Point classes, and pass them to program methods
+- fix Y axis
+- fix scaling
 - handle horizontal and vertical lines
 - handle quadratic bezier curves
 - handle arcto
@@ -8,5 +9,7 @@
 - create `adds_commands` matcher for g-code program specs
   - accepts a block
   - diffable output
+- beter end to end tests
+  - maybe include LinuxCNC
 - cut to depth in multiple passes
 - v-engrave filled areas

@@ -62,6 +62,8 @@ RSpec.describe Svgcode::SVG::Command do
         ]
       end
     end
+
+    context 'when '
   end
 
   describe '#absolute?' do
@@ -189,6 +191,10 @@ RSpec.describe Svgcode::SVG::Command do
       end
     end
   end
+
+  skip '#name_str'
+
+  skip '#divide_points_by!'
 
   describe '.name_str' do
     context 'when a legitimate symbol and a boolean value are passed' do

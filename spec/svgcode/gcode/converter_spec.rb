@@ -83,7 +83,13 @@ RSpec.describe Svgcode::GCode::Converter do
         ])
       end
     end
+
+    skip 'when the start of a cut is an absolute command and close is called'
+
+    skip 'when the start of a cut is a relative command and close is called'
   end
+
+  skip '#metric?'
 
   describe '#finish' do
     context 'when a move and a cut path has been converted' do

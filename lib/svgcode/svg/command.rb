@@ -54,11 +54,24 @@ module Svgcode
         nil
       end
 
+      def divide_points_by!(amount)
+        @points.each { |point| point.divide_by!(amount) }
+        nil
+      end
+
+      def name_str
+        Command.name_str(@name, absolute?)
+      end
+
       def ==(other)
         other.is_a?(self.class) && 
           other.name == @name && 
           other.absolute == @absolute && 
           other.points == @points
+      end
+
+      def to_s
+        name_str + @points.collect { |p| p.to_s }.join(' ')
       end
 
       def self.name_str(sym, absolute)

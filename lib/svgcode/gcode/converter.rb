@@ -4,12 +4,16 @@ require 'svgcode/svg/path'
 module Svgcode
   module GCode
     class Converter
-      attr_reader :program, :finished
+      PX_PER_INCH = 300
+      PX_PER_MM = PX_PER_INCH / 25.4
+
+      attr_reader :program, :finished, :metric
 
       def initialize(opts = {})
         @finished = false
         @program = Program.new(opts)
-        opts[:metric] == false ? @program.imperial! : @program.metric!
+        @metric = opts[:metric] != false
+        @metric ? @program.metric! : @program.imperial!
         @program.feedrate!
       end
 
@@ -19,10 +23,15 @@ module Svgcode
         start = nil
 
         path.commands.each do |cmd|
-          cmd.negate_points_y!          
-          start = cmd if start.nil? && cmd.name != :move
+          #cmd.negate_points_y!
 
-          if cmd.absolute? && @program.relative?
+          if metric?
+            #cmd.divide_points_by!(PX_PER_MM)
+          else
+            cmd.divide_points_by!(PX_PER_INCH)
+          end
+
+          if (cmd.name == :close || cmd.absolute?) && @program.relative?
             @program.absolute!
           elsif cmd.relative? && @program.absolute?
             @program.relative!
@@ -31,14 +40,38 @@ module Svgcode
           case cmd.name
           when :move
             @program.go!(cmd.points.first.x, cmd.points.first.y)
+
+            if cmd.relative?
+              cmd = Svgcode::SVG::Command.new(
+                name: :move,
+                absolute: true,
+                points: [
+                  Svgcode::SVG::Point.new(
+                    cmd.points.first.x + @program.x,
+                    cmd.points.first.y + @program.y
+                  )
+                ]
+              )
+            end
+
+            start = cmd
           when :line
             @program.cut!(cmd.points.first.x, cmd.points.first.y)
           when :cubic
-            cubic!(cmd)
+            @program.cubic_spline!(
+              cmd.points[0].x, cmd.points[0].y,
+              cmd.points[1].x, cmd.points[1].y,
+              cmd.points[2].x, cmd.points[2].y,
+            )
           when :close
             @program.cut!(start.points.first.x, start.points.first.y)
+            start = nil
           end
         end
+      end
+
+      def metric?
+        @metric
       end
 
       def finish
@@ -51,21 +84,6 @@ module Svgcode
 
       def to_s
         @program.to_s
-      end
-
-      private      
-
-      def cubic!(cmd)
-        start_pt = @program.pos
-        end_pt = cmd.points[2]
-        ctrl_pt_1 = cmd.points[0].relative(start_pt)
-        ctrl_pt_2 = cmd.points[1].relative(end_pt)
-
-        @program.cubic_spline!(
-          ctrl_pt_1.x, ctrl_pt_1.y,
-          ctrl_pt_2.x, ctrl_pt_2.y,
-          end_pt.x, end_pt.y
-        )
       end
     end
   end
