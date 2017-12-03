@@ -58,6 +58,7 @@ module Svgcode
       def <<(command)
         if (@x.nil? || @y.nil?) && 
           command.letter == 'G' &&
+          command.number < 6 &&
           command != Command.relative &&
           command != Command.absolute
         then
@@ -75,6 +76,10 @@ module Svgcode
 
       def metric!
         self << Command.metric
+      end
+
+      def imperial!
+        self << Command.imperial
       end
 
       def absolute!
@@ -107,6 +112,7 @@ module Svgcode
 
       def home!
         clear! if plunged?
+        @commands.pop if @commands.last == Command.relative
         self << Command.home if poised?
         @x = nil
         @y = nil
@@ -163,10 +169,16 @@ module Svgcode
       end
 
       def temp_absolute
-        was_absolute = absolute?
-        absolute! unless absolute?
+        was_relative = relative?
+
+        if @commands.last == Command.relative
+          @commands.pop
+          @is_absolute = true
+        end
+
+        absolute! if relative?
         yield
-        relative! unless was_absolute
+        relative! if was_relative
       end
 
       def set_coords(x, y)

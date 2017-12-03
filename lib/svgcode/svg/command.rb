@@ -19,8 +19,14 @@ module Svgcode
           @points = str_or_opts[:points]
         else
           str = str_or_opts
-          @absolute = !!str[0].match(/[A-Z]/)
           @name = NAMES[str[0].to_s.downcase]
+
+          @absolute =
+          if @name == :close
+            true
+          else
+            !!str[0].match(/[A-Z]/)
+          end
 
           if @name != :close && str.length > 1
             @points = Point.parse(str[1..(str.length - 1)])

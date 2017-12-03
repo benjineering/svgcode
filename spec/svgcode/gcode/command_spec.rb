@@ -184,6 +184,38 @@ RSpec.describe Svgcode::GCode::Command do
     end
   end
 
+  describe '.metric' do
+    let(:command) { Svgcode::GCode::Command.metric }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to G" do
+      expect(command.letter).to eq 'G'
+    end
+
+    it "sets the returned command's number to 21" do
+      expect(command.number).to eq 21
+    end
+  end
+
+  describe '.imperial' do
+    let(:command) { Svgcode::GCode::Command.imperial }
+
+    it 'returns a new command' do
+      expect(command).to be_a Svgcode::GCode::Command
+    end
+
+    it "sets the returned command's letter to G" do
+      expect(command.letter).to eq 'G'
+    end
+
+    it "sets the returned command's number to 20" do
+      expect(command.number).to eq 20
+    end
+  end
+
   describe '.home' do
     let(:command) { Svgcode::GCode::Command.home }
 

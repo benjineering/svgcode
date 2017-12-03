@@ -53,6 +53,10 @@ module Svgcode
         Command.new(:g, 21)
       end
 
+      def self.imperial
+        Command.new(:g, 20)
+      end
+
       def self.home
         Command.new(:g, 30)
       end

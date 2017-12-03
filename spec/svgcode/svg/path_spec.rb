@@ -17,7 +17,7 @@ RSpec.describe Svgcode::SVG::Path do
             absolute: false,
             points: [Svgcode::SVG::Point.new(2, 9.1)]
           ),
-          Svgcode::SVG::Command.new(name: :close),
+          Svgcode::SVG::Command.new(name: :close, absolute: true),
           Svgcode::SVG::Command.new(
             name: :move,
             absolute: true,
@@ -28,7 +28,7 @@ RSpec.describe Svgcode::SVG::Path do
             absolute: false,
             points: [Svgcode::SVG::Point.new(18, 17.0)]
           ),
-          Svgcode::SVG::Command.new(name: :close)
+          Svgcode::SVG::Command.new(name: :close, absolute: true)
         ]
       end
     end

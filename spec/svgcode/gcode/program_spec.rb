@@ -234,16 +234,29 @@ RSpec.describe Svgcode::GCode::Program do
   end
 
   describe '#metric!' do
-    context 'when #absolute! has been called' do
+    context 'when nothing has been called' do
       let(:program) do
         prog = Svgcode::GCode::Program.new
-        prog.absolute!
         prog.metric!
         prog
       end
 
       it 'adds a G21 command to @commands' do
         expect(program.commands.last).to eq Svgcode::GCode::Command.new('G21')
+      end
+    end
+  end
+
+  describe '#imperial!' do
+    context 'when nothing has been called' do
+      let(:program) do
+        prog = Svgcode::GCode::Program.new
+        prog.imperial!
+        prog
+      end
+
+      it 'adds a G20 command to @commands' do
+        expect(program.commands.last).to eq Svgcode::GCode::Command.new('G20')
       end
     end
   end
