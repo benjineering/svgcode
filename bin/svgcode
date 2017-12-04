@@ -3,7 +3,7 @@
 require 'bundler/setup'
 require 'svgcode'
 
-raise 'Usage: parse_file <path_to_svg>' unless ARGV.length == 1
+abort 'Usage: parse_file <path_to_svg>' unless ARGV.length == 1
 
 in_path = File.expand_path(ARGV.first)
 raise "#{in_path} is not readable" unless File.readable?(in_path)
@@ -11,3 +11,5 @@ svg_str = File.read(in_path)
 
 out_path = in_path.gsub(/\.svg\Z/i, '.ngc')
 File.open(out_path, 'w') { |f| f << Svgcode.parse(svg_str) }
+
+puts "G-code written to #{out_path}"
