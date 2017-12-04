@@ -198,6 +198,8 @@ RSpec.describe Svgcode::SVG::Command do
 
   skip '#flip_points_y!'
 
+  skip '#absolute'
+
   skip '#absolute!'
 
   describe '.name_str' do

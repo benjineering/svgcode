@@ -40,9 +40,8 @@ module Svgcode
 
           case cmd.name
           when :move
+            start = cmd.relative? ? cmd.absolute(@program.pos) : cmd
             @program.go!(cmd.points.first.x, cmd.points.first.y)
-            cmd.absolute!(@program.pos) if cmd.relative?
-            start = cmd
           when :line
             @program.cut!(cmd.points.first.x, cmd.points.first.y)
           when :cubic
@@ -73,9 +72,9 @@ module Svgcode
       private
 
       def cubic!(cmd)
-        # SVG cubic bezier has all control points relative to start
-        # g-code I&J are relative to start, and P&Q relative to end
-        # I, J, P & Q are always relative, but SVG values can be absolute
+        # A relative SVG cubic bezier has all control points relative to start.
+        # G-code I&J are relative to start, and P&Q relative to end.
+        # I, J, P & Q are always relative, but SVG values can be absolute.
         cmd.points[0] -= @program.pos if cmd.absolute?
         cmd.points[1] -= cmd.points[2]
 

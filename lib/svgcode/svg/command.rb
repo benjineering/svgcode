@@ -44,6 +44,11 @@ module Svgcode
         !@absolute
       end
 
+      def absolute(pos)
+        points = @points.collect { |p| p + pos }
+        Command.new(name: @name, absolute: true, points: points)
+      end
+
       def absolute!(pos)
         if relative?
           @points.collect! { |p| p + pos }
