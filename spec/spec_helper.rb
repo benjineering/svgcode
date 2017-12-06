@@ -2,6 +2,8 @@ require 'bundler/setup'
 require 'svgcode'
 require 'byebug'
 
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each { |f| require f }
+
 RSpec.configure do |config|
   
   # Enable flags like --only-failures and --next-failure
@@ -11,4 +13,6 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.expect_with :rspec { |c| c.syntax = :expect }
+
+  config.fail_fast = true
 end

@@ -10,6 +10,7 @@ module Svgcode
       attr_reader :program, :finished, :metric, :max_y
 
       def initialize(opts)
+        raise ArgumentError.new if opts.nil? || opts[:max_y].nil?
         @finished = false
         @max_y = opts.delete(:max_y)
         @program = Program.new(opts)

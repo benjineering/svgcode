@@ -134,6 +134,8 @@ RSpec.describe Svgcode::GCode::Command do
     end
   end
 
+  skip '#roughly_equal?'
+
   describe '.parse_single' do
     context 'when a string containing a single command is passed' do
       let(:command) { Svgcode::GCode::Command.parse_single('X15.78') }
@@ -398,4 +400,8 @@ RSpec.describe Svgcode::GCode::Command do
       end
     end
   end
+
+  skip '.g'
+
+  skip '.m'
 end

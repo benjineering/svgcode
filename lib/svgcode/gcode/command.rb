@@ -1,31 +1,34 @@
 module Svgcode
   module GCode
     class Command
+      INT_FORMAT = "%02d"
+      FLOAT_FORMAT = "%.3f"
+      INT_LETTERS = [ 'M', 'G' ]
+
       attr_reader :letter, :number, :args
 
-      def initialize(str_or_sym = nil, number = nil, args = [])
-        if number.nil?
-          parts = str_or_sym.split(/\s+/)
+      def initialize(letter_or_str = nil, number = nil, args = [])
+        if letter_or_str.length > 1
+          parts = letter_or_str.split(/\s+/)
           cmd = Command.parse_single(parts.shift)
           @letter = cmd.letter
           @number = cmd.number
           @args = parts.collect { |arg| Command.parse_single(arg) }        
         else
-          @letter = str_or_sym
+          @letter = letter_or_str
           @number = number
           @args = args
         end
 
         @letter = @letter.to_s.upcase
-        @number = @number.to_f
+        @number = @number.to_f unless @number.nil?
       end
 
       def to_s
-        num_fmt = @letter == 'M' || @letter == 'G' ? "%02d" : "%.3f"
-        num = num_fmt % @number
-        str = "#{@letter}#{num}"
+        num_fmt = INT_LETTERS.include?(@letter) ? INT_FORMAT : FLOAT_FORMAT
+        str = "#{@letter}#{num_fmt % @number}"
         str += " #{@args.join(' ')}" unless @args.nil? || @args.empty?
-
+=begin
         if self == Command.absolute
           str += ' (abs)'
         elsif self == Command.relative
@@ -35,7 +38,7 @@ module Svgcode
         elsif self == Command.imperial
           str += ' (imperial)'
         end
-
+=end
         str
       end
 
@@ -44,6 +47,22 @@ module Svgcode
           other.letter == @letter &&
           other.number.eql?(@number) &&
           other.args == @args
+      end
+
+      def roughly_equal?(other)
+        return false unless @letter == other.letter
+        return false unless @args.length == other.args.length
+        return @number == other.number unless @number.nil? || other.number.nil?
+
+        result = true
+        @args.each_with_index do |arg, i|
+          unless arg.roughly_equal?(other.args[i])
+            result = false
+            break
+          end
+        end
+
+        result
       end
 
       def self.parse_single(str)
@@ -115,6 +134,14 @@ module Svgcode
         Command.new(:g, 1, [
           Command.new(:z, depth)
         ])
+      end
+
+      def self.g(number, args = nil)
+        Command.new(:g, number, args)
+      end
+
+      def self.m(number, args = nil)
+        Command.new(:m, number, args)
       end
     end
   end

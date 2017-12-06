@@ -4,6 +4,10 @@ require 'svgcode/gcode/invalid_command_error'
 module Svgcode
   module GCode
     class Program
+      DEFAULT_FEEDRATE = 120
+      DEFAULT_CLEARANCE = 5
+      DEFAULT_DEPTH = -0.5
+
       attr_accessor :opts, :commands
 
       # 3 states
@@ -21,9 +25,9 @@ module Svgcode
         @is_absolute = true if @is_absolute.nil?
 
         @opts = {
-          feedrate: 120,
-          clearance: 5,
-          depth: -0.5
+          feedrate: DEFAULT_FEEDRATE,
+          clearance: DEFAULT_CLEARANCE,
+          depth: DEFAULT_DEPTH
         }.merge(opts)
       end
 

@@ -1,10 +1,14 @@
 require 'spec_helper'
+Command = Svgcode::GCode::Command
+Converter = Svgcode::GCode::Converter
+Program = Svgcode::GCode::Program
 
-RSpec.describe Svgcode::GCode::Converter do
+RSpec.describe Converter do
   describe '.new' do
     context 'when an option hash is passed' do
       let(:converter) do
-        Svgcode::GCode::Converter.new(
+        Converter.new(
+          max_y: 18.8,
           metric: false,
           feedrate: 1_110.2,
           clearance: 2,
@@ -17,7 +21,11 @@ RSpec.describe Svgcode::GCode::Converter do
       end
 
       it 'creates a new program' do
-        expect(converter.program).to be_a Svgcode::GCode::Program
+        expect(converter.program).to be_a Program
+      end
+
+      it 'sets @max_y from opts' do
+        expect(converter.max_y).to eq 18.8
       end
 
       it "sets the new program's feedrate from opts" do
@@ -33,29 +41,46 @@ RSpec.describe Svgcode::GCode::Converter do
       end
 
       it 'adds an imperial and a feedrate command to the program' do
-        expect(converter.program.commands).to eq([
-          Svgcode::GCode::Command.imperial,
-          Svgcode::GCode::Command.feedrate(1110.2)
-        ])
+        expect(converter.program.commands).to match_commands('G20, F')
       end
     end
 
-    context 'when nothing is passed' do
-      let(:converter) { Svgcode::GCode::Converter.new }
+    context 'when only max_y is passed in opts' do
+      let(:converter) { Converter.new(max_y: 300) }
 
       it 'sets finished to false' do
         expect(converter.finished).to be false
       end
 
       it 'creates a new program' do
-        expect(converter.program).to be_a Svgcode::GCode::Program
+        expect(converter.program).to be_a Program
+      end
+
+      it 'sets @max_y from opts' do
+        expect(converter.max_y).to eq 300
       end
 
       it 'adds metric and feedrate commands to the program' do
         expect(converter.program.commands).to eq([
-          Svgcode::GCode::Command.metric,
-          Svgcode::GCode::Command.feedrate(1000)
+          Command.metric,
+          Command.feedrate(Program::DEFAULT_FEEDRATE)
         ])
+      end
+    end
+
+    context 'when nothing is passed' do
+      let(:converter) { Converter.new }
+
+      it 'raises an ArgumentError' do
+        expect { converter }.to raise_error ArgumentError
+      end
+    end
+
+    context 'when opts is passed without a max_y value' do
+      let(:converter) { Converter.new }
+
+      it 'raises an ArgumentError' do
+        expect { converter }.to raise_error ArgumentError
       end
     end
   end
@@ -64,7 +89,7 @@ RSpec.describe Svgcode::GCode::Converter do
     context 'when an SVG path description string containing an absolute move "\
     "and a relative line command is passed' do
       let(:converter) do
-        c = Svgcode::GCode::Converter.new
+        c = Converter.new(max_y: 100)
         c << 'M2848.82,0l0,86.22'
         c
       end
@@ -72,14 +97,14 @@ RSpec.describe Svgcode::GCode::Converter do
       it 'adds metric, feedrate, absolute, go, clear, plunge, relative and '\
       'cut commands to the program, negating any y values' do
         expect(converter.program.commands).to eq([
-          Svgcode::GCode::Command.metric,
-          Svgcode::GCode::Command.feedrate(1_000),
-          Svgcode::GCode::Command.absolute,
-          Svgcode::GCode::Command.go(2_848.82, -0),
-          Svgcode::GCode::Command.clear(converter.program.clearance),
-          Svgcode::GCode::Command.plunge(converter.program.depth),
-          Svgcode::GCode::Command.relative,
-          Svgcode::GCode::Command.cut(0, -86.22)
+          Command.metric,
+          Command.feedrate(Program::DEFAULT_FEEDRATE),
+          Command.absolute,
+          Command.go(2_848.82, -0),
+          Command.clear(converter.program.clearance),
+          Command.plunge(converter.program.depth),
+          Command.relative,
+          Command.cut(0, -86.22)
         ])
       end
     end
@@ -94,7 +119,7 @@ RSpec.describe Svgcode::GCode::Converter do
   describe '#finish' do
     context 'when a move and a cut path has been converted' do
       let(:converter) do
-        c = Svgcode::GCode::Converter.new
+        c = Converter.new(max_y: 100)
         c << 'M12.2,180 L12,80'
         c.finish
         c
@@ -102,9 +127,9 @@ RSpec.describe Svgcode::GCode::Converter do
 
       it 'adds clear, home and stop commands to the program' do
         expect(converter.program.commands.last(3)).to eq([
-          Svgcode::GCode::Command.clear(converter.program.clearance),
-          Svgcode::GCode::Command.home,
-          Svgcode::GCode::Command.stop
+          Command.clear(converter.program.clearance),
+          Command.home,
+          Command.stop
         ])
       end
 
@@ -118,7 +143,7 @@ RSpec.describe Svgcode::GCode::Converter do
     context 'when a move and a cut path has been converted and '\
     'finish has been called' do
       let(:converter) do
-        c = Svgcode::GCode::Converter.new
+        c = Converter.new(max_y: 100)
         c << 'M1.11,122 l0,-202'
         c.finish
         c
