@@ -24,11 +24,17 @@ RSpec::Matchers.define :match_commands do |expected_str|
   end
 
   failure_message do |actuals|
-    "Expected commands #{pretty_commands(actuals)} to match #{expected_str}"
+    "Expected commands:\n"\
+    "  #{pretty_commands(actuals)}\n"\
+    "to match:\n"\
+    "  #{expected_str}"
   end
 
   failure_message_when_negated do |actuals|
-    "Expected commands #{pretty_commands(actuals)} not to match #{expected_str}"
+    "Expected commands:\n"\
+    "  #{pretty_commands(actuals)}\n"\
+    "not to match:\n"\
+    "  #{expected_str}"
   end
 
   def pretty_commands(commands)

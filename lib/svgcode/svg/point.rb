@@ -25,20 +25,36 @@ module Svgcode
         @y = -@y
       end
 
-      def relative(other)
-        Point.new(other.x - @x, other.y - @y)
+      def +(point_or_num)
+        if point_or_num.is_a?(Point)
+          Point.new(@x + point_or_num.x, @y + point_or_num.y)
+        else
+          Point.new(@x + point_or_num, @y + point_or_num)
+        end
       end
 
-      def +(other)
-        Point.new(@x + other.x, @y + other.y)
+      def -(point_or_num)
+        if point_or_num.is_a?(Point)
+          Point.new(@x - point_or_num.x, @y - point_or_num.y)
+        else
+          Point.new(@x - point_or_num, @y - point_or_num)
+        end
       end
 
-      def -(other)
-        Point.new(@x - other.x, @y - other.y)
+      def *(point_or_num)
+        if point_or_num.is_a?(Point)
+          Point.new(@x / point_or_num.x, @y / point_or_num.y)
+        else
+          Point.new(@x / point_or_num, @y / point_or_num)
+        end
       end
 
-      def /(amount)
-        Point.new(@x / amount, @y / amount)
+      def /(point_or_num)
+        if point_or_num.is_a?(Point)
+          Point.new(@x / point_or_num.x, @y / point_or_num.y)
+        else
+          Point.new(@x / point_or_num, @y / point_or_num)
+        end
       end
 
       def divide_by!(amount)

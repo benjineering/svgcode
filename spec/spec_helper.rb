@@ -13,6 +13,4 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
 
   config.expect_with :rspec { |c| c.syntax = :expect }
-
-  config.fail_fast = true
 end
