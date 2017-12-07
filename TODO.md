@@ -1,15 +1,14 @@
 ## TODO
-- get specs passing
+- handle transform matrices
+- handle horizontal and vertical lines
+- handle quadratic bezier curves
+- handle arcto
 - move converter out of GCode module
 - fix Point
   - make base Point class
   - make GCode point class
     - convert between the two
     - use in Program
-- handle transform matrices
-- handle horizontal and vertical lines
-- handle quadratic bezier curves
-- handle arcto
 
 # TODO LATER
 - create `add_commands` matcher for g-code program specs
