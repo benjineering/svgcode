@@ -7,11 +7,13 @@ module Svgcode
       PX_PER_INCH = 300
       PX_PER_MM = PX_PER_INCH / 25.4
 
+      attr_accessor :transforms
       attr_reader :program, :finished, :metric, :max_y
 
       def initialize(opts)
         raise ArgumentError.new if opts.nil? || opts[:max_y].nil?
         @finished = false
+        @transforms = []
         @max_y = opts.delete(:max_y)
         @program = Program.new(opts)
         @metric = opts[:metric] != false
@@ -25,6 +27,7 @@ module Svgcode
         start = nil
 
         path.commands.each do |cmd|
+          cmd.apply_transforms!(@transforms)
           cmd.absolute? ? cmd.flip_points_y!(@max_y) : cmd.negate_points_y!
 
           if metric?

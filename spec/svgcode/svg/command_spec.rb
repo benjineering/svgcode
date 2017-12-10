@@ -64,8 +64,6 @@ module Svgcode
             ]
           end
         end
-
-        context 'when '
       end
 
       describe '#absolute?' do
@@ -163,6 +161,8 @@ module Svgcode
           end
         end
       end
+
+      skip '#apply_transforms!'
 
       describe '#negate_points_y' do
         context 'when the command has multiple points' do

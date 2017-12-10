@@ -74,6 +74,12 @@ module Svgcode
       def flip_points_y!(max_y)
         @points.each { |point| point.flip_y!(max_y) }
         nil
+      end      
+
+      def apply_transforms!(transforms)
+        transforms.each do |transform|
+          @points.collect! { |point| transform.apply(point) }
+        end
       end
 
       def name_str

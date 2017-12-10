@@ -1,8 +1,8 @@
 ## TODO
-- handle transform matrices
 - handle horizontal and vertical lines
 - handle quadratic bezier curves
 - handle arcto
+- handle non-matrix transforms
 - move converter out of GCode module
 - fix Point
   - make base Point class
@@ -11,10 +11,7 @@
     - use in Program
 
 # TODO LATER
-- create `add_commands` matcher for g-code program specs
-  - accepts a block
-  - diffable output
-- print GCode desciptions and SVG IDs as options
+- optionally print GCode desciptions and SVG IDs
 - write docs
 - better end to end tests
   - maybe include LinuxCNC

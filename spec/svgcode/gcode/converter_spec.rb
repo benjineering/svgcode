@@ -105,6 +105,8 @@ module Svgcode
         skip 'when the command contains a relative cubic spline'
 
         skip 'when the command contains an absolute cubic spline'
+
+        skip 'when @transforms contains transform objects'
       end
 
       skip '#metric?'
