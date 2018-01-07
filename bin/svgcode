@@ -6,18 +6,19 @@ require 'thor'
 
 
 class SVGCLI < Thor
-  desc 'parse SVG_PATH', 'parses an SVG file to a G-Code file'
-  option :out
+  desc 'parse SVG_PATH [--out OUT_PATH] [--comments]',
+    'parses an SVG file to a G-code file'
+  option :out_path
   option :comments, type: :boolean
   long_desc <<-LONGDESC
-    `svgcode parse ~/Desktop/img.svg` will save the G-Code file as 
+    `svgcode parse ~/Desktop/img.svg` will save the G-code file as 
     '~/Desktop/img.ngc'.
- 
-    Optionally set the --out flag to save the G-Code file elsewhere
-      e.g. `svgcode parse ~/Documents/img.svg --out ~/Desktop/gcode.nc`
+
+    Optionally set the --out-path flag to save the G-code file elsewhere
+    \x5 e.g. `svgcode parse ~/Documents/img.svg --out-path ~/Desktop/gcode.nc`
 
     Optionally pass the --comments flag to print SVG IDs as comments
-      e.g. `svgcode parse --comments ~/Desktop/img.svg`
+    \x5 e.g. `svgcode parse --comments ~/Desktop/img.svg`
   LONGDESC
   def parse(in_path)
     in_path = File.expand_path(in_path)
@@ -25,10 +26,10 @@ class SVGCLI < Thor
     svg_str = File.read(in_path)
 
     out_path =
-    if options[:out].nil?
+    if options[:out_path].nil?
       in_path.gsub(/\.svg\Z/i, '.ngc')
     else
-      File.expand_path(options[:out])
+      File.expand_path(options[:out_path])
     end
 
     opts = { comments: options[:comments] }
