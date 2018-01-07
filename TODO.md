@@ -1,4 +1,5 @@
 ## TODO
+- optionally print SVG IDs
 - handle horizontal and vertical lines
 - handle quadratic bezier curves
 - handle arcto
@@ -11,7 +12,7 @@
     - use in Program
 
 # TODO LATER
-- optionally print GCode desciptions and SVG IDs
+- optionally print GCode desciptions
 - write docs
 - better end to end tests
   - maybe include LinuxCNC

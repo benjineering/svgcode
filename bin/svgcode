@@ -2,14 +2,41 @@
 
 require 'bundler/setup'
 require 'svgcode'
+require 'thor'
 
-abort 'Usage: parse_file <path_to_svg>' unless ARGV.length == 1
 
-in_path = File.expand_path(ARGV.first)
-raise "#{in_path} is not readable" unless File.readable?(in_path)
-svg_str = File.read(in_path)
+class SVGCLI < Thor
+  desc 'parse SVG_PATH', 'parses an SVG file to a G-Code file'
+  option :out
+  option :comments, type: :boolean
+  long_desc <<-LONGDESC
+    `svgcode parse ~/Desktop/img.svg` will save the G-Code file as 
+    '~/Desktop/img.ngc'.
+ 
+    Optionally set the --out flag to save the G-Code file elsewhere
+      e.g. `svgcode parse ~/Documents/img.svg --out ~/Desktop/gcode.nc`
 
-out_path = in_path.gsub(/\.svg\Z/i, '.ngc')
-File.open(out_path, 'w') { |f| f << Svgcode.parse(svg_str) }
+    Optionally pass the --comments flag to print SVG IDs as comments
+      e.g. `svgcode parse --comments ~/Desktop/img.svg`
+  LONGDESC
+  def parse(in_path)
+    in_path = File.expand_path(in_path)
+    raise "#{in_path} is not readable" unless File.readable?(in_path)
+    svg_str = File.read(in_path)
 
-puts "G-code written to #{out_path}"
+    out_path =
+    if options[:out].nil?
+      in_path.gsub(/\.svg\Z/i, '.ngc')
+    else
+      File.expand_path(options[:out])
+    end
+
+    opts = { comments: options[:comments] }
+    File.open(out_path, 'w') { |f| f << Svgcode.parse(svg_str) }
+
+    puts "G-code written to #{out_path}"
+  end
+end
+
+
+SVGCLI.start(ARGV)

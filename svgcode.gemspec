@@ -28,4 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'yard'
 
   spec.add_dependency 'nokogiri', '~> 1.8'
+  spec.add_dependency 'thor', '~> 0.20'
 end
