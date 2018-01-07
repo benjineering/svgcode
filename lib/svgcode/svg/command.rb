@@ -77,8 +77,10 @@ module Svgcode
       end      
 
       def apply_transforms!(transforms)
-        transforms.each do |transform|
-          @points.collect! { |point| transform.apply(point) }
+        unless transforms.empty?
+          transforms.reverse.each do |transform|
+            @points.collect! { |point| transform.apply(point) }
+          end
         end
       end
 

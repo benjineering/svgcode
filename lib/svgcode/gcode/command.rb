@@ -72,7 +72,7 @@ module Svgcode
       end
 
       def self.comment(str)
-        "\n(#{str})"
+        "\n(#{str}!!!)"
       end
 
       def self.absolute
