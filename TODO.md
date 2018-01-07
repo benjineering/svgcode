@@ -11,8 +11,10 @@
     - use in Program
 
 # TODO LATER
+- print comments where they lay
 - optionally print GCode desciptions
 - write docs
+- optimise cut order
 - better end to end tests
   - maybe include LinuxCNC
 - cut to depth in multiple passes
