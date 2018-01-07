@@ -33,7 +33,7 @@ class SVGCLI < Thor
     end
 
     opts = { comments: options[:comments] }
-    File.open(out_path, 'w') { |f| f << Svgcode.parse(svg_str) }
+    File.open(out_path, 'w') { |f| f << Svgcode.parse(svg_str, opts) }
 
     puts "G-code written to #{out_path}"
   end

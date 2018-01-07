@@ -61,6 +61,10 @@ module Svgcode
         @metric
       end
 
+      def comment!(str)
+        @program.comment!(str)
+      end
+
       def finish
         unless @finished
           @program.home!

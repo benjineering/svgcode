@@ -71,6 +71,10 @@ module Svgcode
         Command.new(letter, number)
       end
 
+      def self.comment(str)
+        "\n(#{str})"
+      end
+
       def self.absolute
         Command.new(:g, 90)
       end

@@ -60,7 +60,8 @@ module Svgcode
       end
 
       def <<(command)
-        if (@x.nil? || @y.nil?) && 
+        if !command.is_a?(String) &&
+          (@x.nil? || @y.nil?) && 
           command.letter == 'G' &&
           command.number < 6 &&
           command != Command.relative &&
@@ -76,6 +77,10 @@ module Svgcode
         end
 
         @commands << command
+      end
+
+      def comment!(str)
+        self << Command.comment(str)
       end
 
       def metric!

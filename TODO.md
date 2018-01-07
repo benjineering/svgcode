@@ -1,5 +1,4 @@
 ## TODO
-- optionally print SVG IDs
 - handle horizontal and vertical lines
 - handle quadratic bezier curves
 - handle arcto
