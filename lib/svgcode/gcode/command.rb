@@ -28,17 +28,6 @@ module Svgcode
         num_fmt = INT_LETTERS.include?(@letter) ? INT_FORMAT : FLOAT_FORMAT
         str = "#{@letter}#{num_fmt % @number}"
         str += " #{@args.join(' ')}" unless @args.nil? || @args.empty?
-=begin
-        if self == Command.absolute
-          str += ' (abs)'
-        elsif self == Command.relative
-          str += ' (rel)'
-        elsif self == Command.metric
-          str += ' (metric)'
-        elsif self == Command.imperial
-          str += ' (imperial)'
-        end
-=end
         str
       end
 
