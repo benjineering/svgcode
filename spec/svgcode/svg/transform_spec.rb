@@ -48,6 +48,8 @@ module Svgcode
           end
         end
       end
+
+      skip '#to_matrix'
     end
   end
 end

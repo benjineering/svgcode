@@ -228,6 +228,8 @@ module Svgcode
         end
       end
 
+      skip '#comment!'
+
       describe '#metric!' do
         context 'when nothing has been called' do
           let(:program) do

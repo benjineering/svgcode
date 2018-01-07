@@ -406,6 +406,8 @@ module Svgcode
       skip '.g'
 
       skip '.m'
+
+      skip '.comment'
     end
   end
 end

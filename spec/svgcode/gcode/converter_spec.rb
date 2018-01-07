@@ -111,6 +111,8 @@ module Svgcode
 
       skip '#metric?'
 
+      skip '#comment!'
+
       describe '#finish' do
         context 'when a move and a cut path has been converted' do
           let(:converter) do
