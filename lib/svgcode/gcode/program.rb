@@ -6,7 +6,7 @@ module Svgcode
     class Program
       DEFAULT_FEEDRATE = 120
       DEFAULT_CLEARANCE = 5
-      DEFAULT_DEPTH = -0.1
+      DEFAULT_DEPTH = -0.075
 
       attr_accessor :opts, :commands
 

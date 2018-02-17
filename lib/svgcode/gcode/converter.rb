@@ -67,7 +67,8 @@ module Svgcode
 
       def finish
         unless @finished
-          @program.home!
+          @program.clear!
+          @program.go!(0, 0)
           @program.stop!
           @finished = true
         end
