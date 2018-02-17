@@ -13,7 +13,7 @@ module Svgcode
           cmd = Command.parse_single(parts.shift)
           @letter = cmd.letter
           @number = cmd.number
-          @args = parts.collect { |arg| Command.parse_single(arg) }        
+          @args = parts.collect { |arg| Command.parse_single(arg) }
         else
           @letter = letter_or_str
           @number = number
@@ -32,7 +32,7 @@ module Svgcode
       end
 
       def ==(other)
-        other.is_a?(self.class) && 
+        other.is_a?(self.class) &&
           other.letter == @letter &&
           other.number.eql?(@number) &&
           other.args == @args
@@ -61,7 +61,8 @@ module Svgcode
       end
 
       def self.comment(str)
-        "\n(#{str}!!!)"
+        str.gsub!(/[()]/, '')
+        "\n(#{str})"
       end
 
       def self.absolute
