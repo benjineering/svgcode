@@ -50,8 +50,8 @@ module Svgcode
             expect(program.opts[:clearance]).to eq 5
           end
 
-          it 'sets the depth option to -0.5' do
-            expect(program.opts[:depth]).to eq -0.5
+          it 'sets the depth option to -0.075' do
+            expect(program.opts[:depth]).to eq -0.075
           end
 
           it 'sets @is_absolute to true' do
@@ -411,7 +411,7 @@ module Svgcode
           it 'sets y to nil' do
             expect(program.y).to be nil
           end
-        end    
+        end
 
         context 'when the spindle is neither plunged nor poised' do
           let(:program) do
@@ -461,7 +461,7 @@ module Svgcode
           end
         end
 
-        context 'when relative and plunged' do      
+        context 'when relative and plunged' do
           let(:program) do
             prog = Program.new(absolute: false)
             prog.plunge!
@@ -487,7 +487,7 @@ module Svgcode
         end
       end
 
-      describe '#plunge!' do      
+      describe '#plunge!' do
         context 'when absolute and not poised' do
           let(:program) do
             prog = Program.new(absolute: true)
@@ -663,7 +663,7 @@ module Svgcode
           let(:program) do
             prog = Program.new
             prog.go!(1, 22)
-            prog.cubic_spline!(5, 0.689, 18.9, 6, 1888, 97.001)            
+            prog.cubic_spline!(5, 0.689, 18.9, 6, 1888, 97.001)
             prog
           end
 

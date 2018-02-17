@@ -124,7 +124,7 @@ module Svgcode
 
           it 'adds clear, home and stop commands to the program' do
             expect(converter.program.commands.last(3)).to match_commands(
-              'G0 Z, G30, M2'
+              'G0 Z5, G0 X0 Y0, M02'
             )
           end
 
@@ -146,7 +146,6 @@ module Svgcode
 
           it 'returns a formatted g-code string' do
             float = '-?\\d+\\.\\d+'
-
             expect(converter.to_s).to match(
               "G21\n"\
               "F#{float}\n"\
@@ -158,7 +157,8 @@ module Svgcode
               "G01 X#{float} Y#{float}\n"\
               "G90\n"\
               "G00 Z#{float}\n"\
-              "G30\n"\
+              "G91\n"\
+              "G00 X#{float} Y#{float}\n"\
               "M02"
             )
           end

@@ -3,4 +3,5 @@ doc
 .byebug_history
 .rspec_status
 pkg
+.rspec_status
 

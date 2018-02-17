@@ -1,9 +1,12 @@
 module Svgcode
   module GCode
     class Command
-      INT_FORMAT = "%02d"
-      FLOAT_FORMAT = "%.3f"
       INT_LETTERS = [ 'M', 'G' ]
+      INT_ROUND_TO = 0
+      INT_FORMAT = "%02d"
+
+      FLOAT_ROUND_TO = 3
+      FLOAT_FORMAT = "%.#{FLOAT_ROUND_TO}f"
 
       attr_reader :letter, :number, :args
 
@@ -26,7 +29,9 @@ module Svgcode
 
       def to_s
         num_fmt = INT_LETTERS.include?(@letter) ? INT_FORMAT : FLOAT_FORMAT
-        str = "#{@letter}#{num_fmt % @number}"
+        round_to = num_fmt == INT_FORMAT ? INT_ROUND_TO : FLOAT_ROUND_TO
+
+        str = "#{@letter}#{num_fmt % @number.round(round_to)}"
         str += " #{@args.join(' ')}" unless @args.nil? || @args.empty?
         str
       end
