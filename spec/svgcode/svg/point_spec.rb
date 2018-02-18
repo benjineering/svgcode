@@ -39,6 +39,18 @@ module Svgcode
             expect(point.y).to eql 16.2
           end
         end
+
+        context 'when x and y are passed as scientific notation' do
+          let(:point) { Point.new('8.39249e-17', '2e0') }
+
+          it 'sets x' do
+            expect(point.x).to eql 0.0000000000000000839249
+          end
+
+          it 'sets y' do
+            expect(point.y).to eql 2.0
+          end
+        end
       end
 
       describe '#==' do

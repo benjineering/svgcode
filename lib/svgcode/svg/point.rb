@@ -9,8 +9,8 @@ module Svgcode
       def initialize(str_or_x, y = nil)
         if y.nil?
           parts = str_or_x.split(VALUE_SEP)
-          @x = parts.first.to_f
-          @y = parts.last.to_f
+          @x = Point.str_to_f(parts.first)
+          @y = Point.str_to_f(parts.last)
         else
           @x = str_or_x.to_f
           @y = y.to_f
@@ -76,6 +76,10 @@ module Svgcode
 
       def self.parse(str)
         str.split(OBJECT_SEP).collect { |p| Point.new(p.strip) }
+      end
+
+      def self.str_to_f(str)
+        str.include?('e') ? "%f" % str : str.to_f
       end
     end
   end
