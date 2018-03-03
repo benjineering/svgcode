@@ -29,13 +29,41 @@ SVG_STR =
   </g>
 </svg>'
 
+TRANSFORMED_SVG_STR =
+'<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 250 1367" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+  <g id="Layer1" transform="matrix(8.46778e-17,-1.38289,1.3706,8.39249e-17,-2.84217e-14,1342.3)">
+    <g id="Divider-1" serif:id="Divider 1" transform="matrix(0.603327,0,0,0.880541,-148.49,-18.08)">
+      <path d="M540,227.224L540,20.533" style="fill:none;stroke:black;stroke-width:2.02px;stroke-linecap:round;stroke-miterlimit:1.5;"/>
+    </g>
+  </g>
+</svg>'
+
 RSpec.describe Svgcode do
   it 'has a version number' do
     expect(Svgcode::VERSION).not_to be nil
   end
 
-  it 'parses a simple SVG file' do
+  it 'parses simple SVG' do
     gcode = Svgcode.parse(SVG_STR)
     expect(gcode.length).to be > 1
+  end
+
+  it 'parses transformed SVG correctly' do
+    expected =
+'G21
+F120.000
+G90
+G00 X88.000 Y387.000
+G00 Z5.000
+G01 Z-0.075
+G01 X0.000 Y387.000
+G00 Z5.000
+G00 X0.000 Y0.000
+M02'
+
+    actual = Svgcode.parse(TRANSFORMED_SVG_STR)
+    expect(actual).to eq expected
   end
 end

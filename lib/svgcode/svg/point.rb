@@ -1,3 +1,5 @@
+require 'svgcode/utility'
+
 module Svgcode
   module SVG
     class Point
@@ -9,11 +11,11 @@ module Svgcode
       def initialize(str_or_x, y = nil)
         if y.nil?
           parts = str_or_x.split(VALUE_SEP)
-          @x = Point.str_to_f(parts.first)
-          @y = Point.str_to_f(parts.last)
+          @x = Utility.x_to_f(parts.first)
+          @y = Utility.x_to_f(parts.last)
         else
-          @x = str_or_x.to_f
-          @y = y.to_f
+          @x = Utility.x_to_f(str_or_x)
+          @y = Utility.x_to_f(y)
         end
       end
 
@@ -76,10 +78,6 @@ module Svgcode
 
       def self.parse(str)
         str.split(OBJECT_SEP).collect { |p| Point.new(p.strip) }
-      end
-
-      def self.str_to_f(str)
-        str.include?('e') ? "%f" % str : str.to_f
       end
     end
   end

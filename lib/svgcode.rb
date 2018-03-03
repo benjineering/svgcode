@@ -1,3 +1,4 @@
+require 'svgcode/utility'
 require 'svgcode/version'
 require 'svgcode/gcode/converter'
 require 'svgcode/svg/transform'

@@ -4,6 +4,8 @@ require 'matrix'
 module Svgcode
   module SVG
     class Transform
+      DECIMALS = 3
+
       attr_reader :a, :b, :c, :d, :e, :f
 
       def initialize(str_or_a, b = nil, c = nil, d = nil, e = nil, f = nil)
@@ -14,26 +16,26 @@ module Svgcode
           nums.each_with_index do |n, i|
             case i
             when 0
-              @a = n.to_f
+              @a = n.to_f.round(DECIMALS)
             when 1
-              @b = n.to_f
+              @b = n.to_f.round(DECIMALS)
             when 2
-              @c = n.to_f
+              @c = n.to_f.round(DECIMALS)
             when 3
-              @d = n.to_f
+              @d = n.to_f.round(DECIMALS)
             when 4
-              @e = n.to_f
+              @e = n.to_f.round(DECIMALS)
             when 5
-              @f = n.to_f
+              @f = n.to_f.round(DECIMALS)
             end
           end
         else
-          @a = str_or_a.to_f
-          @b = b.to_f
-          @c = c.to_f
-          @d = d.to_f
-          @e = e.to_f
-          @f = f.to_f
+          @a = str_or_a.to_f.round(DECIMALS)
+          @b = b.to_f.round(DECIMALS)
+          @c = c.to_f.round(DECIMALS)
+          @d = d.to_f.round(DECIMALS)
+          @e = e.to_f.round(DECIMALS)
+          @f = f.to_f.round(DECIMALS)
         end
       end
 

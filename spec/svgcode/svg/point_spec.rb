@@ -24,7 +24,7 @@ module Svgcode
           end
 
           it 'parses y to a float' do
-            expect(point.y).to eql 18.2222
+            expect(point.y).to eql 18.222
           end
         end
 
@@ -41,14 +41,14 @@ module Svgcode
         end
 
         context 'when x and y are passed as scientific notation' do
-          let(:point) { Point.new('8.39249e-17', '2e0') }
+          let(:point) { Point.new('8.39249e17', '2e-2') }
 
           it 'sets x' do
-            expect(point.x).to eql 0.0000000000000000839249
+            expect(point.x).to eql 8.39249e+17
           end
 
           it 'sets y' do
-            expect(point.y).to eql 2.0
+            expect(point.y).to eql 0.02
           end
         end
       end

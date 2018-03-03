@@ -13,19 +13,19 @@ module Svgcode
           end
 
           it 'sets a' do
-            expect(transform.a).to eq -0.0171558
+            expect(transform.a).to eq -0.017
           end
 
           it 'sets b' do
-            expect(transform.b).to eq 0.0640262
+            expect(transform.b).to eq 0.064
           end
 
           it 'sets c' do
-            expect(transform.c).to eq -0.0640262
+            expect(transform.c).to eq -0.064
           end
 
           it 'sets d' do
-            expect(transform.d).to eq -0.0171558
+            expect(transform.d).to eq -0.017
           end
 
           it 'sets e' do
