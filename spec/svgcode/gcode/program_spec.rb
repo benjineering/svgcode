@@ -720,6 +720,10 @@ module Svgcode
         end
       end
 
+      describe '#arc!' do
+        skip 'adds a G0 and G2 command'
+      end
+
       describe '#to_s' do
         context 'when #go! and #cut! have been called' do
           let(:start_x) { 0.001 }

@@ -96,6 +96,20 @@ module Svgcode
               'G21, F, G90, G0 X Y, G0 Z, G1 Z, G91, G1 X Y'
             )
           end
+
+          context 'when an SVG circle is passed' do
+            let(:converter) do
+              c = Converter.new(max_y: 100)
+              c << Svgcode::SVG::Circle.new(89.6, 15, 22.2222)
+              c
+            end
+
+            it 'adds go, XY plane selection and arc move commands' do
+              expect(converter.program.commands).to match_commands(
+                'G21, F, G90, G0 X Y, G0 Z, G1 Z, G91, G17, G2 X Y R'
+              )
+            end
+          end
         end
 
         skip 'when the start of a cut is an absolute command and close is called'

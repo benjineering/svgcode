@@ -21,39 +21,14 @@ module Svgcode
         @program.feedrate!
       end
 
-      def <<(svg_d)
-        svg_start = nil
-        path = SVG::Path.new(svg_d)
-        start = nil
+      def <<(str_or_command)
+        @start = nil
 
-        path.commands.each do |cmd|
-          cmd.apply_transforms!(@transforms)
-          cmd.absolute? ? cmd.flip_points_y!(@max_y) : cmd.negate_points_y!
-
-          if metric?
-            cmd.divide_points_by!(PX_PER_MM)
-          else
-            cmd.divide_points_by!(PX_PER_INCH)
-          end
-
-          if (cmd.name == :close || cmd.absolute?) && @program.relative?
-            @program.absolute!
-          elsif cmd.relative? && @program.absolute?
-            @program.relative!
-          end
-
-          case cmd.name
-          when :move
-            start = cmd.relative? ? cmd.absolute(@program.pos) : cmd
-            @program.go!(cmd.points.first.x, cmd.points.first.y)
-          when :line
-            @program.cut!(cmd.points.first.x, cmd.points.first.y)
-          when :cubic
-            cubic!(cmd)
-          when :close
-            @program.cut!(start.points.first.x, start.points.first.y)
-            start = nil
-          end
+        if str_or_command.is_a?(String)
+          path = SVG::Path.new(str_or_command)
+          path.commands.each { |cmd| add_command(cmd)}
+        else
+          add_command(str_or_command)
         end
       end
 
@@ -79,6 +54,39 @@ module Svgcode
       end
 
       private
+
+      def add_command(cmd)
+        cmd.apply_transforms!(@transforms)
+        cmd.absolute? ? cmd.flip_points_y!(@max_y) : cmd.negate_points_y!
+
+        if metric?
+          cmd.divide_points_by!(PX_PER_MM)
+        else
+          cmd.divide_points_by!(PX_PER_INCH)
+        end
+
+        if cmd.name == :close || cmd.absolute?
+          @program.absolute!
+        elsif cmd.relative?
+          @program.relative!
+        end
+
+        case cmd.name
+        when :move
+          @start = cmd.relative? ? cmd.absolute(@program.pos) : cmd
+          @program.go!(cmd.points.first.x, cmd.points.first.y)
+        when :line
+          @program.cut!(cmd.points.first.x, cmd.points.first.y)
+        when :cubic
+          cubic!(cmd)
+        when :circle
+          @program.go!(cmd.start_x, cmd.centre_y)
+          @program.arc!(cmd.start_x, cmd.centre_y, cmd.radius)
+        when :close
+          @program.cut!(@start.points.first.x, @start.points.first.y)
+          @start = nil
+        end
+      end
 
       def cubic!(cmd)
         # A relative SVG cubic bezier has all control points relative to start.

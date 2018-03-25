@@ -9,28 +9,28 @@ module Svgcode
 
           it 'parses commands to objects and saves them' do
             expect(path.commands).to eq [
-              Command.new(
+              PathCommand.new(
                 name: :move,
                 absolute: true,
                 points: [Point.new(37, 17)]
               ),
-              Command.new(
+              PathCommand.new(
                 name: :line,
                 absolute: false,
                 points: [Point.new(2, 9.1)]
               ),
-              Command.new(name: :close, absolute: true),
-              Command.new(
+              PathCommand.new(name: :close, absolute: true),
+              PathCommand.new(
                 name: :move,
                 absolute: true,
                 points: [Point.new(50, 0)]
               ),
-              Command.new(
+              PathCommand.new(
                 name: :line,
                 absolute: false,
                 points: [Point.new(18, 17.0)]
               ),
-              Command.new(name: :close, absolute: true)
+              PathCommand.new(name: :close, absolute: true)
             ]
           end
         end

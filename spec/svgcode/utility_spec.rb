@@ -2,12 +2,6 @@ require 'spec_helper'
 
 RSpec.describe Svgcode::Utility do
   describe '.x_to_f' do
-    context 'a float is passed' do
-      it 'rounds up to 3 decimal places' do
-        expect(Svgcode::Utility.x_to_f(10.8735)).to eql 10.874
-      end
-    end
-
     context 'an integer is passed' do
       it 'converts to a float with 3 decimal places' do
         expect(Svgcode::Utility.x_to_f(8)).to eql 8.000
@@ -15,8 +9,8 @@ RSpec.describe Svgcode::Utility do
     end
 
     context 'a float string is passed' do
-      it 'converts to a float with 3 decimal places' do
-        expect(Svgcode::Utility.x_to_f('15.15144')).to eql 15.151
+      it 'converts to a float' do
+        expect(Svgcode::Utility.x_to_f('15.15144')).to eql 15.15144
       end
     end
 

@@ -2,10 +2,10 @@ require 'spec_helper'
 
 module Svgcode
   module SVG
-    RSpec.describe Command do
+    RSpec.describe PathCommand do
       describe '.new' do
         context 'when a command string is passed with an uppercase letter' do
-          let(:command) { Command.new('M50,88.2 8.0,15.15') }
+          let(:command) { PathCommand.new('M50,88.2 8.0,15.15') }
 
           it 'sets the command name' do
             expect(command.name).to eq :move
@@ -24,7 +24,7 @@ module Svgcode
         end
 
         context 'when a command string is passed with an lowercase letter' do
-          let(:command) { Command.new('l590,22.8') }
+          let(:command) { PathCommand.new('l590,22.8') }
 
           it 'sets the command name' do
             expect(command.name).to eq :line
@@ -43,7 +43,7 @@ module Svgcode
 
         context 'when an options hash is passed' do
           let(:command) do
-            Command.new(name: :cubic, absolute: true, points: [
+            PathCommand.new(name: :cubic, absolute: true, points: [
               Point.new(8.8, 90.1),
               Point.new(15.5, 201.11)
             ])
@@ -68,7 +68,7 @@ module Svgcode
 
       describe '#absolute?' do
         context 'when the absolute attribute is true' do
-          let(:command) { Command.new(name: :move, absolute: true) }
+          let(:command) { PathCommand.new(name: :move, absolute: true) }
 
           it 'returns true' do
             expect(command.absolute?).to be true
@@ -76,7 +76,7 @@ module Svgcode
         end
 
         context 'when the absolute attribute is false' do
-          let(:command) { Command.new(name: :move, absolute: false) }
+          let(:command) { PathCommand.new(name: :move, absolute: false) }
 
           it 'returns false' do
             expect(command.absolute?).to be false
@@ -86,7 +86,7 @@ module Svgcode
 
       describe '#relative?' do
         context 'when the absolute attribute is true' do
-          let(:command) { Command.new(name: :move, absolute: true) }
+          let(:command) { PathCommand.new(name: :move, absolute: true) }
 
           it 'returns false' do
             expect(command.relative?).to be false
@@ -94,17 +94,17 @@ module Svgcode
         end
 
         context 'when the absolute attribute is false' do
-          let(:command) { Command.new(name: :move, absolute: false) }
+          let(:command) { PathCommand.new(name: :move, absolute: false) }
 
           it 'returns true' do
             expect(command.relative?).to be true
           end
         end
-      end  
+      end
 
       describe '#==' do
         let(:a) do
-          Command.new(name: :cubic, absolute: true, points: [
+          PathCommand.new(name: :cubic, absolute: true, points: [
             Point.new(166, 15.815),
             Point.new(3, 12.99)
           ])
@@ -112,7 +112,7 @@ module Svgcode
 
         context 'when name, absolute and points are the same' do
           let(:b) do
-            Command.new(name: :cubic, absolute: true, points: [
+            PathCommand.new(name: :cubic, absolute: true, points: [
               Point.new(166, 15.815),
               Point.new(3, 12.99)
             ])
@@ -125,7 +125,7 @@ module Svgcode
 
         context 'when name differs' do
           let(:b) do
-            Command.new(name: :line, absolute: true, points: [
+            PathCommand.new(name: :line, absolute: true, points: [
               Point.new(166, 15.815),
               Point.new(3, 12.99)
             ])
@@ -138,7 +138,7 @@ module Svgcode
 
         context 'when absolute differs' do
           let(:b) do
-            Command.new(name: :cubic, absolute: false, points: [
+            PathCommand.new(name: :cubic, absolute: false, points: [
               Point.new(166, 15.815),
               Point.new(3, 12.99)
             ])
@@ -151,7 +151,7 @@ module Svgcode
 
         context 'when points differ' do
           let(:b) do
-            Command.new(name: :cubic, absolute: true, points: [
+            PathCommand.new(name: :cubic, absolute: true, points: [
               Point.new(3, 12.99)
             ])
           end
@@ -167,12 +167,12 @@ module Svgcode
       describe '#negate_points_y' do
         context 'when the command has multiple points' do
           let(:command) do
-            Command.new('c4.025,0 7.476,1.448 10.353,4.344')
+            PathCommand.new('c4.025,0 7.476,1.448 10.353,4.344')
           end
 
           it "returns a new command with each point's y negated" do
             expect(command.negate_points_y).to eq(
-              Command.new('c4.025,-0 7.476,-1.448 10.353,-4.344')
+              PathCommand.new('c4.025,-0 7.476,-1.448 10.353,-4.344')
             )
           end
         end
@@ -181,14 +181,14 @@ module Svgcode
       describe '#negate_points_y!' do
         context 'when the command has multiple points' do
           let(:command) do
-            cmd = Command.new('c4.025,0 7.476,1.448 10.353,4.344')
+            cmd = PathCommand.new('c4.025,0 7.476,1.448 10.353,4.344')
             cmd.negate_points_y!
             cmd
           end
 
           it 'negates the y of each point in place' do
             expect(command).to eq(
-              Command.new('c4.025,-0 7.476,-1.448 10.353,-4.344')
+              PathCommand.new('c4.025,-0 7.476,-1.448 10.353,-4.344')
             )
           end
         end
@@ -206,8 +206,8 @@ module Svgcode
 
       describe '.name_str' do
         context 'when a legitimate symbol and a boolean value are passed' do
-          let(:string) { Command.name_str(:line, true) }
-          
+          let(:string) { PathCommand.name_str(:line, true) }
+
           it 'returns a string containing the correct letter, '\
           'capitalised if absolute' do
             expect(string).to eq 'L'

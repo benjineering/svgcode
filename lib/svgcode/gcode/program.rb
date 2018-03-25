@@ -61,7 +61,7 @@ module Svgcode
 
       def <<(command)
         if !command.is_a?(String) &&
-          (@x.nil? || @y.nil?) && 
+          (@x.nil? || @y.nil?) &&
           command.letter == 'G' &&
           command.number < 6 &&
           command != Command.relative &&
@@ -154,6 +154,10 @@ module Svgcode
         perform_cut(x, y) do
           self << Command.cubic_spline(i, j, _p, q, x, y)
         end
+      end
+
+      def arc!(x, y, i)
+        self << Command.arc(x, y, i)
       end
 
       def pos

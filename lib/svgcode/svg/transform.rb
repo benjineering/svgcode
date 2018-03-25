@@ -1,11 +1,10 @@
+require 'svgcode/utility'
 require 'svgcode/svg/point'
 require 'matrix'
 
 module Svgcode
   module SVG
     class Transform
-      DECIMALS = 3
-
       attr_reader :a, :b, :c, :d, :e, :f
 
       def initialize(str_or_a, b = nil, c = nil, d = nil, e = nil, f = nil)
@@ -16,26 +15,26 @@ module Svgcode
           nums.each_with_index do |n, i|
             case i
             when 0
-              @a = n.to_f.round(DECIMALS)
+              @a = Svgcode::Utility.x_to_f(n)
             when 1
-              @b = n.to_f.round(DECIMALS)
+              @b = Svgcode::Utility.x_to_f(n)
             when 2
-              @c = n.to_f.round(DECIMALS)
+              @c = Svgcode::Utility.x_to_f(n)
             when 3
-              @d = n.to_f.round(DECIMALS)
+              @d = Svgcode::Utility.x_to_f(n)
             when 4
-              @e = n.to_f.round(DECIMALS)
+              @e = Svgcode::Utility.x_to_f(n)
             when 5
-              @f = n.to_f.round(DECIMALS)
+              @f = Svgcode::Utility.x_to_f(n)
             end
           end
         else
-          @a = str_or_a.to_f.round(DECIMALS)
-          @b = b.to_f.round(DECIMALS)
-          @c = c.to_f.round(DECIMALS)
-          @d = d.to_f.round(DECIMALS)
-          @e = e.to_f.round(DECIMALS)
-          @f = f.to_f.round(DECIMALS)
+          @a = Svgcode::Utility.x_to_f(str_or_a)
+          @b = Svgcode::Utility.x_to_f(b)
+          @c = Svgcode::Utility.x_to_f(c)
+          @d = Svgcode::Utility.x_to_f(d)
+          @e = Svgcode::Utility.x_to_f(e)
+          @f = Svgcode::Utility.x_to_f(f)
         end
       end
 
@@ -47,7 +46,13 @@ module Svgcode
         point_m = Matrix[[point.x], [point.y], [1]]
         transform_m = to_matrix
         result = transform_m * point_m
-        Point.new(result[0, 0], result[1, 0])
+        p = Point.new(result[0, 0], result[1, 0])
+
+        puts self.to_matrix
+        puts p
+        puts
+
+        p
       end
     end
   end

@@ -1,4 +1,4 @@
-require 'svgcode/svg/command'
+require 'svgcode/svg/path_command'
 
 module Svgcode
   module SVG
@@ -6,7 +6,7 @@ module Svgcode
       attr_reader :commands
 
       def initialize(str)
-        @commands = str.split(/(?=[a-z])/i).collect { |s| Command.new(s) }
+        @commands = str.split(/(?=[a-z])/i).collect { |s| PathCommand.new(s) }
       end
     end
   end

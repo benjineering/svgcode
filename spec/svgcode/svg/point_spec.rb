@@ -24,7 +24,7 @@ module Svgcode
           end
 
           it 'parses y to a float' do
-            expect(point.y).to eql 18.222
+            expect(point.y).to eql 18.2222
           end
         end
 

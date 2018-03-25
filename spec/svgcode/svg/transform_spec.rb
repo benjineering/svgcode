@@ -13,19 +13,19 @@ module Svgcode
           end
 
           it 'sets a' do
-            expect(transform.a).to eq -0.017
+            expect(transform.a).to eq -0.0171558
           end
 
           it 'sets b' do
-            expect(transform.b).to eq 0.064
+            expect(transform.b).to eq 0.0640262
           end
 
           it 'sets c' do
-            expect(transform.c).to eq -0.064
+            expect(transform.c).to eq -0.0640262
           end
 
           it 'sets d' do
-            expect(transform.d).to eq -0.017
+            expect(transform.d).to eq -0.0171558
           end
 
           it 'sets e' do
@@ -35,6 +35,20 @@ module Svgcode
           it 'sets f' do
             expect(transform.f).to eq 456.823
           end
+        end
+
+        context 'when a matrix transform string containing scientific notation is passed' do
+          skip 'sets a'
+
+          skip 'sets b'
+
+          skip 'sets c'
+
+          skip 'sets d'
+
+          skip 'sets e'
+
+          skip 'sets f'
         end
       end
 

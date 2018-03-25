@@ -403,6 +403,8 @@ module Svgcode
         end
       end
 
+      skip '.arc'
+
       skip '.g'
 
       skip '.m'
