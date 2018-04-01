@@ -157,7 +157,9 @@ module Svgcode
       end
 
       def arc!(x, y, i)
-        self << Command.arc(x, y, i)
+        perform_cut(x, y) do
+          self << Command.arc(x, y, i)
+        end 
       end
 
       def pos
