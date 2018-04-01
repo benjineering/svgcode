@@ -1,4 +1,5 @@
 require 'svgcode/gcode/program'
+require 'svgcode/svg/circle'
 require 'svgcode/svg/path'
 
 module Svgcode
@@ -28,7 +29,8 @@ module Svgcode
           path = SVG::Path.new(str_or_command)
           path.commands.each { |cmd| add_command(cmd)}
         else
-          add_command(str_or_command)
+          cmd = SVG::Circle.new(str_or_command)
+          add_command(cmd)
         end
       end
 

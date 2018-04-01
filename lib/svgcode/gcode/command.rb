@@ -111,7 +111,7 @@ module Svgcode
           Command.new(:y, y)
         ])
       end
-      
+
       def self.cubic_spline(i, j, _p, q, x, y)
         Command.new(:g, 5, [
           Command.new(:i, i),
@@ -125,7 +125,7 @@ module Svgcode
 
       # X and Y are the endpoint, and I is the X offset of the centrepoint
       def self.arc(x, y, i)
-        Command.new(:g, 2 [
+        Command.new(:g, 2, [
           Command.new(:x, x),
           Command.new(:y, y),
           Command.new(:i, i)

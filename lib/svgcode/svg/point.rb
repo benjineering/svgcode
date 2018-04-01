@@ -64,6 +64,12 @@ module Svgcode
         @y /= amount
       end
 
+      def flip_y(max_y)
+        p = Point.new(@x, @y)
+        p.flip_y!(max_y)
+        p
+      end
+
       def flip_y!(max_y)
         @y = max_y - @y
       end

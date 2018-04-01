@@ -191,6 +191,8 @@ module Svgcode
         end
       end
 
+      skip '#flip_y'
+
       describe '.parse' do
         context 'when a string containing space separated point values is passed' do
           let(:points) { Point.parse('7.3,160.23 8.0,15.65') }

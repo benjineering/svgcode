@@ -28,6 +28,27 @@ module Svgcode
       def start_x
         @centre_x - @radius
       end
+
+      def apply_transforms!(transforms)
+        super(transforms)
+
+        transforms.reverse.each do |transform|
+          r_start = transform.apply(Point.new(start_x, 0))
+          r_end = transform.apply(Point.new(@centre_x, 0))
+          @centre_x = r_end.x
+          @radius = @centre_x - r_start.x
+        end
+
+        @centre_x = @points.first.x
+        @centre_y = @points.first.y
+      end
+
+      def divide_points_by!(amount)
+        super(amount)
+        @centre_x = @points.first.x
+        @centre_y = @points.first.y
+        @radius /= amount
+      end
     end
   end
 end

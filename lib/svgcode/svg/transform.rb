@@ -46,13 +46,7 @@ module Svgcode
         point_m = Matrix[[point.x], [point.y], [1]]
         transform_m = to_matrix
         result = transform_m * point_m
-        p = Point.new(result[0, 0], result[1, 0])
-
-        puts self.to_matrix
-        puts p
-        puts
-
-        p
+        Point.new(result[0, 0], result[1, 0])
       end
     end
   end
