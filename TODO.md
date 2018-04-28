@@ -1,4 +1,5 @@
 ## TODO
+- make DPI a command line option
 - handle horizontal and vertical lines
 - handle quadratic bezier curves
 - handle arcto
