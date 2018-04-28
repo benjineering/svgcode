@@ -10,6 +10,8 @@ It has been fairly thorougly tested with SVGs exported from Affinity Designer,
 though you will need to check the "Export text as curves for font independence"
 option as the SVG text element is currently not handled.
 
+Also, you must ensure that the DPI is set to 300 when exporting.
+
 Other SVG features which are yet to be handled:
 - horizontal and vertical lines
 - quadratic bezier curves
