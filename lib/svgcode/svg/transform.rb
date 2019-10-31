@@ -9,7 +9,7 @@ module Svgcode
 
       def initialize(str_or_a, b = nil, c = nil, d = nil, e = nil, f = nil)
         if str_or_a.is_a?(String)
-          raise ArgumentException.new unless str_or_a.start_with?('matrix')
+          raise ArgumentError.new unless str_or_a.start_with?('matrix')
           nums = str_or_a.gsub(/.+\(/, '').gsub(/\)/, '').split(/\s*,\s*/)
 
           nums.each_with_index do |n, i|
